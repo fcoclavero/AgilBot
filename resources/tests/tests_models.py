@@ -1,5 +1,6 @@
 from django.test import TestCase
 from ..models import Resource
+from .factories import ResourceFactory
 
 # Create your tests here.
 class ResourceModelTestCase(TestCase):
@@ -8,10 +9,7 @@ class ResourceModelTestCase(TestCase):
     # Arrange
     def setUp(self):
         self.old_count = Resource.objects.count()
-        self.resource = Resource(
-            name = 'recurso',
-            url = 'http://blablabla.com'
-        )
+        self.resource = ResourceFactory.build()
 
     def test_model_create_resource(self):
         """Test if you can create a resource directly in the model"""

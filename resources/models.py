@@ -18,4 +18,4 @@ class Resource(models.Model):
         verbose_name_plural = 'Recursos'
 
     def __str__(self):
-        return self.name
+        return self.name + ': ' + self.url
