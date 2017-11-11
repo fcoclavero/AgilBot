@@ -5,7 +5,7 @@ from django.db import models
 class Resource(models.Model):
 
     name = models.CharField(max_length=50, blank=True, verbose_name='nombre')
-    url = models.CharField(max_length=100, blank=False)
+    url = models.URLField(blank=False)
     create_timestamp = models.DateTimeField(
         auto_now_add=True, editable=False, verbose_name='Fecha de creación'
     )
