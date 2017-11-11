@@ -1,5 +1,6 @@
 Django==1.11
 dj-database-url
+factory-boy
 whitenoise
 psycopg2
 gunicorn
