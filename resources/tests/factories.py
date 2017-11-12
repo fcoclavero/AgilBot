@@ -1,5 +1,5 @@
 from factory import DjangoModelFactory, fuzzy, Faker
-from ..models import Resource, Tag
+from ..models import Resource, Tag, Type
 
 class ResourceFactory(DjangoModelFactory):
     class Meta:
@@ -14,4 +14,10 @@ class TagFactory(DjangoModelFactory):
         model = Tag
 
     name = Faker('sentence')
-    # internal_name = Faker('word')
+
+
+class TypeFactory(DjangoModelFactory):
+    class Meta:
+        model = Type
+
+    name = Faker('file_extension')

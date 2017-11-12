@@ -1,6 +1,6 @@
 from django.test import TestCase
-from ..models import Resource, Tag
-from .factories import ResourceFactory, TagFactory
+from ..models import Resource, Tag, Type
+from .factories import ResourceFactory, TagFactory, TypeFactory
 
 # Create your tests here.
 class ResourceModelTestCase(TestCase):
@@ -96,4 +96,36 @@ class AssociationModelTestCase(TestCase):
         self.assertEquals(
             list(Resource.objects.get(pk=resource.pk).tags.all()), tags,
             'The tags were not associated to the resource'
+        )
+
+
+class TypeModelTestCase(TestCase):
+    """This class defines the test suite for the Types model tests"""
+
+    # Arrange
+    def setUp(self):
+        self.old_count = Type.objects.count()
+        self.type = TypeFactory.build()
+
+    def test_model_create_type(self):
+        """Test if you can create a type directly in the model"""
+        # Act
+        self.type.save()
+        # Assert
+        self.new_count = Type.objects.count()
+        self.assertEquals(
+            self.old_count+1, self.new_count, 'The Type was not created'
+        )
+
+    def test_model_delete_type(self):
+        """Test if you can delete a type directly in the model"""
+        # Arrange:
+        self.type.save()
+        self.old_count = Type.objects.count()
+        # Act
+        Type.objects.filter(pk=self.type.pk).delete()
+        # Assert
+        self.new_count = Type.objects.count()
+        self.assertEquals(
+            self.old_count-1, self.new_count,'The Type was not deleted'
         )
