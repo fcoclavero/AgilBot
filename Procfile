@@ -1,1 +1,1 @@
-web: agilbot.wsgi:application --log-file -
+web: gunicorn agilbot.wsgi:application --log-file -

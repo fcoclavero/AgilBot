@@ -1,4 +1,5 @@
-language: python
+language:
+    - python
 python:
     - "3.6.2"
 install:
@@ -6,4 +7,5 @@ install:
 before_script:
     - python manage.py migrate
     - echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', '', 'asdasdasd') if (User.objects.filter(username='admin').exists() == False) else None" | python manage.py shell
-script: python manage.py test
+script:
+    - python manage.py test
