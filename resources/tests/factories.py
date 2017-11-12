@@ -13,5 +13,5 @@ class TagFactory(DjangoModelFactory):
     class Meta:
         model = Tag
 
-    name = Faker('word')
-    internal_name = Faker('word')
+    name = Faker('sentence')
+    # internal_name = Faker('word')

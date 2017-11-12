@@ -23,7 +23,7 @@ class ResourceModelTestCase(TestCase):
 
     def test_model_delete_resource(self):
         """Test if you can delete a resource directly in the model"""
-        # Assert:
+        # Arrange:
         self.resource.save()
         self.old_count = Resource.objects.count()
         # Act
@@ -55,7 +55,7 @@ class TagModelTestCase(TestCase):
 
     def test_model_delete_tag(self):
         """Test if you can delete a tag directly in the model"""
-        # Assert:
+        # Arrange:
         self.tag.save()
         self.old_count = Tag.objects.count()
         # Act
@@ -64,6 +64,16 @@ class TagModelTestCase(TestCase):
         self.new_count = Tag.objects.count()
         self.assertEquals(
             self.old_count-1, self.new_count, 'The Tag was not deleted'
+        )
+
+    def test_model_tag_internal_name(self):
+        """Test if the tag's internal_name is defined properly"""
+        # Act
+        self.tag = TagFactory(name = 'thIs-is.a_tAg')
+        # Assert
+        self.assertEquals(
+            self.tag.internal_name, 'ThisIsATag',
+            'The internal_name of the Tag is incorrect'
         )
 
 
