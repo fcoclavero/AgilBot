@@ -5,4 +5,5 @@ install:
     - pip install -r requirements.txt
 before_script:
     - python manage.py migrate
+    - echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', '', 'asdasdasd') if (User.objects.filter(username='admin').exists() == False) else None" | python manage.py shell
 script: python manage.py test
