@@ -1,5 +1,5 @@
 from django.test import TestCase
-from ..models import Resource, Tag, Type
+from ..models import Resource, Tag, Type, Week, Semester
 from .factories import ResourceFactory, TagFactory, TypeFactory, WeekFactory, SemesterFactory
 
 
