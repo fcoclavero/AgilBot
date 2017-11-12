@@ -4,7 +4,6 @@ import string
 
 # Create your models here.
 class Tag(models.Model):
-
     name = models.CharField(max_length=50, blank=True, verbose_name='nombre')
     internal_name = models.CharField(
         max_length=50, blank=True, editable=False,
@@ -22,7 +21,7 @@ class Tag(models.Model):
         verbose_name_plural = 'Etiquetas'
 
     def __str__(self):
-        return self.name
+        return self.internal_name
 
     def save(self, *args, **kwargs):
         int_name = str(self.name)
@@ -35,8 +34,24 @@ class Tag(models.Model):
         super(Tag, self).save(*args, **kwargs)
 
 
-class Resource(models.Model):
+class Type(models.Model):
+    name = models.CharField(max_length=50, blank=True, verbose_name='nombre')
+    create_timestamp = models.DateTimeField(
+        auto_now_add=True, editable=False, verbose_name='Fecha de creación'
+    )
+    update_timestamp = models.DateTimeField(
+        auto_now=True, editable=False, verbose_name='Fecha de modificación'
+    )
 
+    class Meta:
+        verbose_name = 'Tipo'
+        verbose_name_plural = 'Tipos'
+
+    def __str__(self):
+        return self.name
+
+
+class Resource(models.Model):
     name = models.CharField(max_length=50, blank=True, verbose_name='nombre')
     url = models.URLField(blank=False)
     create_timestamp = models.DateTimeField(
@@ -48,6 +63,11 @@ class Resource(models.Model):
     tags = models.ManyToManyField(
         Tag, related_name='resources', blank=True,
         verbose_name = Tag._meta.verbose_name_plural
+    )
+    type = models.ForeignKey(
+        Type, related_name='type', blank=True, null=True,
+        verbose_name = Type._meta.verbose_name,
+        on_delete = models.SET_NULL
     )
 
     class Meta:
