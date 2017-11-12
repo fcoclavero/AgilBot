@@ -1,6 +1,7 @@
 from django.test import TestCase
 from ..models import Resource, Tag, Type
-from .factories import ResourceFactory, TagFactory, TypeFactory
+from .factories import ResourceFactory, TagFactory, TypeFactory, WeekFactory, SemesterFactory
+
 
 # Create your tests here.
 class ResourceModelTestCase(TestCase):
@@ -18,7 +19,7 @@ class ResourceModelTestCase(TestCase):
         # Assert
         self.new_count = Resource.objects.count()
         self.assertEquals(
-            self.old_count+1, self.new_count, 'The Resource was not created'
+            self.old_count + 1, self.new_count, 'The Resource was not created'
         )
 
     def test_model_delete_resource(self):
@@ -31,7 +32,7 @@ class ResourceModelTestCase(TestCase):
         # Assert
         self.new_count = Resource.objects.count()
         self.assertEquals(
-            self.old_count-1, self.new_count,'The Resource was not deleted'
+            self.old_count - 1, self.new_count, 'The Resource was not deleted'
         )
 
 
@@ -50,7 +51,7 @@ class TagModelTestCase(TestCase):
         # Assert
         self.new_count = Tag.objects.count()
         self.assertEquals(
-            self.old_count+1, self.new_count, 'The Tag was not created'
+            self.old_count + 1, self.new_count, 'The Tag was not created'
         )
 
     def test_model_delete_tag(self):
@@ -63,18 +64,19 @@ class TagModelTestCase(TestCase):
         # Assert
         self.new_count = Tag.objects.count()
         self.assertEquals(
-            self.old_count-1, self.new_count, 'The Tag was not deleted'
+            self.old_count - 1, self.new_count, 'The Tag was not deleted'
         )
 
     def test_model_tag_internal_name(self):
         """Test if the tag's internal_name is defined properly"""
         # Act
-        self.tag = TagFactory(name = 'thIs-is.a_tAg')
+        self.tag = TagFactory(name='thIs-is.a_tAg')
         # Assert
         self.assertEquals(
             self.tag.internal_name, 'ThisIsATag',
             'The internal_name of the Tag is incorrect'
         )
+
 
 class TypeModelTestCase(TestCase):
     """This class defines the test suite for the Types model tests"""
@@ -91,7 +93,7 @@ class TypeModelTestCase(TestCase):
         # Assert
         self.new_count = Type.objects.count()
         self.assertEquals(
-            self.old_count+1, self.new_count, 'The Type was not created'
+            self.old_count + 1, self.new_count, 'The Type was not created'
         )
 
     def test_model_delete_type(self):
@@ -104,8 +106,73 @@ class TypeModelTestCase(TestCase):
         # Assert
         self.new_count = Type.objects.count()
         self.assertEquals(
-            self.old_count-1, self.new_count,'The Type was not deleted'
+            self.old_count - 1, self.new_count, 'The Type was not deleted'
         )
+
+
+class WeekModelTestCase(TestCase):
+    """This class defines the test suite for the Week model tests"""
+
+    # Arrange
+    def setUp(self):
+        self.old_count = Week.objects.count()
+        self.week = WeekFactory.build()
+
+    def test_model_create_resource(self):
+        """Test if you can create a week directly in the model"""
+        # Act
+        self.week.save()
+        # Assert
+        self.new_count = Week.objects.count()
+        self.assertEquals(
+            self.old_count + 1, self.new_count, 'The Week was not created'
+        )
+
+    def test_model_delete_semester(self):
+        """Test if you can delete a week directly in the model"""
+        # Arrange:
+        self.week.save()
+        self.old_count = Week.objects.count()
+        # Act
+        Week.objects.filter(pk=self.week.pk).delete()
+        # Assert
+        self.new_count = Week.objects.count()
+        self.assertEquals(
+            self.old_count - 1, self.new_count, 'The Week was not deleted'
+        )
+
+
+class SemesterModelTestCase(TestCase):
+    """This class defines the test suite for the Semester model tests"""
+
+    # Arrange
+    def setUp(self):
+        self.old_count = Semester.objects.count()
+        self.semester = SemesterFactory.build()
+
+    def test_model_create_resource(self):
+        """Test if you can create a semester directly in the model"""
+        # Act
+        self.semester.save()
+        # Assert
+        self.new_count = Semester.objects.count()
+        self.assertEquals(
+            self.old_count + 1, self.new_count, 'The Semester was not created'
+        )
+
+    def test_model_delete_semester(self):
+        """Test if you can delete a semester directly in the model"""
+        # Arrange:
+        self.semester.save()
+        self.old_count = Semester.objects.count()
+        # Act
+        Semester.objects.filter(pk=self.semester.pk).delete()
+        # Assert
+        self.new_count = Semester.objects.count()
+        self.assertEquals(
+            self.old_count - 1, self.new_count, 'The Semester was not deleted'
+        )
+
 
 class AssociationModelTestCase(TestCase):
     """This class defines the test suite for the association between models"""
@@ -132,6 +199,50 @@ class AssociationModelTestCase(TestCase):
             self.assertEquals(
                 list(Resource.objects.get(pk=resource.pk).tags.all()), tags,
                 'The tags were not associated to the resource'
+            )
+
+    def test_model_associate_weeks_to_resources(self):
+        """Test if you can associate weeks to resources"""
+        # Arrange:
+        resources = [
+            ResourceFactory(),
+            ResourceFactory(),
+            ResourceFactory(),
+        ]
+        weeks = [
+            WeekFactory(),
+            WeekFactory(),
+            WeekFactory()
+        ]
+        # Act:
+        for resource in resources:
+            for week in weeks:
+                resource.weeks.add(week)
+        # Assert:
+        for resource in resources:
+            self.assertEquals(
+                list(Resource.objects.get(pk=resource.pk).weeks.all()), weeks,
+                'The weeks were not associated to the resource'
+            )
+
+    def test_model_associate_weeks_to_semester(self):
+        """Test if you can associate weeks to semesters"""
+        # Arrange:
+        semester = SemesterFactory()
+        weeks = [
+            WeekFactory(),
+            WeekFactory(),
+            WeekFactory()
+        ]
+        # Act:
+        for week in weeks:
+            week.semester = semester
+            week.save()
+        # Assert:
+        for week in weeks:
+            self.assertEquals(
+                Week.objects.get(pk=week.pk).semester, semester,
+                'The weeks were not associated to the semester'
             )
 
     def test_model_associate_types_to_resources(self):

@@ -1,5 +1,6 @@
 from factory import DjangoModelFactory, fuzzy, Faker
-from ..models import Resource, Tag, Type
+from ..models import Resource, Tag, Type, Week, Semester
+
 
 class ResourceFactory(DjangoModelFactory):
     class Meta:
@@ -21,3 +22,18 @@ class TypeFactory(DjangoModelFactory):
         model = Type
 
     name = Faker('file_extension')
+
+
+class WeekFactory(DjangoModelFactory):
+    class Meta:
+        model = Week
+
+    name = Faker('word')
+
+
+class SemesterFactory(DjangoModelFactory):
+    class Meta:
+        model = Semester
+
+    year = Faker('year')
+    section = Faker('number')
