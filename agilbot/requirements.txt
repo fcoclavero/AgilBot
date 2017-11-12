@@ -1,5 +1,0 @@
-Django==1.11
-dj-database-url
-whitenoise
-gunicorn
-psycopg2
