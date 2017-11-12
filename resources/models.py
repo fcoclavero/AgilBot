@@ -3,13 +3,9 @@ import string
 
 
 # Create your models here.
-class Semester(models.Model):
-    year = models.IntegerField(
-        verbose_name='año'
-    )
-    section = models.IntegerField(
-        verbose_name='año'
-    )
+
+
+class BaseModel(models.Model):
     create_timestamp = models.DateTimeField(
         auto_now_add=True, editable=False,
         verbose_name='Fecha de creación'
@@ -20,6 +16,18 @@ class Semester(models.Model):
     )
 
     class Meta:
+        abstract = True
+
+
+class Semester(BaseModel):
+    year = models.IntegerField(
+        verbose_name='año'
+    )
+    section = models.IntegerField(
+        verbose_name='año'
+    )
+
+    class Meta:
         verbose_name = 'Semestre'
         verbose_name_plural = 'Semestres'
 
@@ -27,20 +35,12 @@ class Semester(models.Model):
         return 'Semestre ' + str(self.year) + ' - ' + str(self.section)
 
 
-class Week(models.Model):
+class Week(BaseModel):
     name = models.CharField(
         max_length=50, blank=True, verbose_name='nombre'
     )
     number = models.IntegerField(
         verbose_name='numero'
-    )
-    create_timestamp = models.DateTimeField(
-        auto_now_add=True, editable=False,
-        verbose_name='Fecha de creación'
-    )
-    update_timestamp = models.DateTimeField(
-        auto_now=True, editable=False,
-        verbose_name='Fecha de modificación'
     )
     semester = models.ForeignKey(
         Semester, related_name='semester', blank=True, null=True,
@@ -56,21 +56,13 @@ class Week(models.Model):
         return self.name + ' ' + str(self.number)
 
 
-class Tag(models.Model):
+class Tag(BaseModel):
     name = models.CharField(
         max_length=50, blank=True, verbose_name='nombre'
     )
     internal_name = models.CharField(
         max_length=50, blank=True, editable=False,
         verbose_name='nombre interno'
-    )
-    create_timestamp = models.DateTimeField(
-        auto_now_add=True, editable=False,
-        verbose_name='Fecha de creación'
-    )
-    update_timestamp = models.DateTimeField(
-        auto_now=True, editable=False,
-        verbose_name='Fecha de modificación'
     )
 
     class Meta:
@@ -91,17 +83,9 @@ class Tag(models.Model):
         super(Tag, self).save(*args, **kwargs)
 
 
-class Type(models.Model):
+class Type(BaseModel):
     name = models.CharField(
         max_length=50, blank=True, verbose_name='nombre'
-    )
-    create_timestamp = models.DateTimeField(
-        auto_now_add=True, editable=False,
-        verbose_name='Fecha de creación'
-    )
-    update_timestamp = models.DateTimeField(
-        auto_now=True, editable=False,
-        verbose_name='Fecha de modificación'
     )
 
     class Meta:
@@ -112,19 +96,11 @@ class Type(models.Model):
         return self.name
 
 
-class Resource(models.Model):
+class Resource(BaseModel):
     name = models.CharField(
         max_length=50, blank=True, verbose_name='nombre'
     )
     url = models.URLField(blank=False)
-    create_timestamp = models.DateTimeField(
-        auto_now_add=True, editable=False,
-        verbose_name='Fecha de creación'
-    )
-    update_timestamp = models.DateTimeField(
-        auto_now=True, editable=False,
-        verbose_name='Fecha de modificación'
-    )
     tags = models.ManyToManyField(
         Tag, related_name='resources', blank=True,
         verbose_name=Tag._meta.verbose_name_plural
