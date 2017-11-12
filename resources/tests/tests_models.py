@@ -76,29 +76,6 @@ class TagModelTestCase(TestCase):
             'The internal_name of the Tag is incorrect'
         )
 
-
-class AssociationModelTestCase(TestCase):
-    """This class defines the test suite for the association between models"""
-
-    def test_model_associate_tags_to_resource(self):
-        """Test if you can associate tags to a resource through the models"""
-        # Arrange:
-        resource = ResourceFactory()
-        tags = [
-            TagFactory(),
-            TagFactory(),
-            TagFactory()
-        ]
-        # Act:
-        for tag in tags:
-            resource.tags.add(tag)
-        # Assert:
-        self.assertEquals(
-            list(Resource.objects.get(pk=resource.pk).tags.all()), tags,
-            'The tags were not associated to the resource'
-        )
-
-
 class TypeModelTestCase(TestCase):
     """This class defines the test suite for the Types model tests"""
 
@@ -128,4 +105,69 @@ class TypeModelTestCase(TestCase):
         self.new_count = Type.objects.count()
         self.assertEquals(
             self.old_count-1, self.new_count,'The Type was not deleted'
+        )
+
+class AssociationModelTestCase(TestCase):
+    """This class defines the test suite for the association between models"""
+
+    def test_model_associate_tags_to_resources(self):
+        """Test if you can associate tags to resources"""
+        # Arrange:
+        resources = [
+            ResourceFactory(),
+            ResourceFactory(),
+            ResourceFactory(),
+        ]
+        tags = [
+            TagFactory(),
+            TagFactory(),
+            TagFactory()
+        ]
+        # Act:
+        for resource in resources:
+            for tag in tags:
+                resource.tags.add(tag)
+        # Assert:
+        for resource in resources:
+            self.assertEquals(
+                list(Resource.objects.get(pk=resource.pk).tags.all()), tags,
+                'The tags were not associated to the resource'
+            )
+
+    def test_model_associate_types_to_resources(self):
+        """Test if you can associate a type to many resources"""
+        # Arrange:
+        resources = [
+            ResourceFactory(),
+            ResourceFactory(),
+            ResourceFactory(),
+        ]
+        type = TypeFactory()
+        # Act:
+        for resource in resources:
+            resource.type = type
+            resource.save()
+        # Assert:
+        for resource in resources:
+            self.assertEquals(
+                Resource.objects.get(pk=resource.pk).type, type,
+                'The type is not associated to the resource'
+            )
+
+    def test_model_remove_type_but_not_its_resource(self):
+        """Test if you can delete a type and keep its resource"""
+        # Arrange:
+        resource = ResourceFactory()
+        type = TypeFactory()
+        resource.type = type
+        resource.save()
+        old_resource_count = Resource.objects.count()
+        # Act:
+        Type.objects.filter(pk=type.pk).delete()
+        new_resource_count = Resource.objects.count()
+        # Assert:
+        self.assertEquals(
+            old_resource_count,
+            new_resource_count,
+            'The resource was deleted'
         )

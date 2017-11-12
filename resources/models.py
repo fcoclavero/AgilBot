@@ -21,7 +21,7 @@ class Tag(models.Model):
         verbose_name_plural = 'Etiquetas'
 
     def __str__(self):
-        return self.name
+        return self.internal_name
 
     def save(self, *args, **kwargs):
         int_name = str(self.name)
@@ -63,6 +63,11 @@ class Resource(models.Model):
     tags = models.ManyToManyField(
         Tag, related_name='resources', blank=True,
         verbose_name = Tag._meta.verbose_name_plural
+    )
+    type = models.ForeignKey(
+        Type, related_name='type', blank=True, null=True,
+        verbose_name = Type._meta.verbose_name,
+        on_delete = models.SET_NULL
     )
 
     class Meta:
