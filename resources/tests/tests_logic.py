@@ -28,11 +28,11 @@ class SearchModelTestCase(TestCase):
             ),
         ]
         tag = TagFactory(name='kanban')
-        tag2 = TagFactory(name='scrum')
+        TagFactory(name='scrum')
         resources[2].tags.add(tag)
         # Act
         results = search_resources('kanBan')
         # Assert
         self.assertEquals(
-            results, resources[1:2], 'The Resources found are not the expected'
+            results, resources[0:3], 'The Resources found are not the expected'
         )

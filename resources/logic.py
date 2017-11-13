@@ -1,3 +1,4 @@
+from itertools import chain
 from .models import Resource, Tag
 # Create intermediary functions here
 
@@ -11,7 +12,10 @@ def search_resources(keyword):
     resource_name_queryset = Resource.objects.filter(name__contains=keyword)
     resource_url_queryset = Resource.objects.filter(url__contains=keyword)
     tag_queryset = Tag.objects.filter(name__contains=keyword)
-    
-    print(resource_name_queryset)
-    print(resource_url_queryset)
-    print(tag_queryset)
+    resource_tag_queryset = Resource.objects.filter(tags__in=tag_queryset)
+    result_list = list(chain(
+        resource_name_queryset,
+        resource_url_queryset,
+        resource_tag_queryset
+    ))
+    return result_list
