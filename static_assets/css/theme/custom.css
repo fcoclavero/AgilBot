@@ -1,0 +1,5 @@
+@media (min-width: 993px) {
+    .m-header-search.m-header-search--expandable .m-header-search__input {
+        width: 120px;
+    }
+}
