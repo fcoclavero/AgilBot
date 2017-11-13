@@ -1,6 +1,12 @@
 from django.test import TestCase
 from ..models import Resource, Tag, Type, Week, Semester
-from .factories import ResourceFactory, TagFactory, TypeFactory, WeekFactory, SemesterFactory
+from .factories import (
+    ResourceFactory,
+    TagFactory,
+    TypeFactory,
+    WeekFactory,
+    SemesterFactory
+)
 
 
 # Create your tests here.
