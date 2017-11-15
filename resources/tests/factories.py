@@ -1,4 +1,4 @@
-from factory import DjangoModelFactory, fuzzy, Faker
+from factory import DjangoModelFactory, Faker
 from ..models import Resource, Tag, Type, Week, Semester
 
 

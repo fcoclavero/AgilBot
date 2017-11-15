@@ -1,10 +1,7 @@
 from django.db import models
-import string
 
 
 # Create your models here.
-
-
 class BaseModel(models.Model):
     create_timestamp = models.DateTimeField(
         auto_now_add=True, editable=False,
@@ -72,14 +69,18 @@ class Tag(BaseModel):
     def __str__(self):
         return self.internal_name
 
+    @staticmethod
+    def transform_name(name):
+        transformed_name = name
+        transformed_name = transformed_name.replace('-', ' ')
+        transformed_name = transformed_name.replace('_', ' ')
+        transformed_name = transformed_name.replace('.', ' ')
+        transformed_name = transformed_name.title()
+        transformed_name = transformed_name.replace(' ', '')
+        return transformed_name
+
     def save(self, *args, **kwargs):
-        int_name = str(self.name)
-        int_name = int_name.replace('-', ' ')
-        int_name = int_name.replace('_', ' ')
-        int_name = int_name.replace('.', ' ')
-        int_name = int_name.title()
-        int_name = int_name.replace(' ', '')
-        self.internal_name = int_name
+        self.internal_name = Tag.transform_name(str(self.name))
         super(Tag, self).save(*args, **kwargs)
 
 
@@ -100,16 +101,22 @@ class Resource(BaseModel):
     name = models.CharField(
         max_length=50, blank=True, verbose_name='nombre'
     )
+
+    description = models.TextField(blank=True, verbose_name='descripción')
+
     url = models.URLField(blank=False)
+
     tags = models.ManyToManyField(
         Tag, related_name='resources', blank=True,
         verbose_name=Tag._meta.verbose_name_plural
     )
+
     type = models.ForeignKey(
         Type, related_name='type', blank=True, null=True,
         verbose_name=Type._meta.verbose_name,
         on_delete=models.SET_NULL
     )
+
     weeks = models.ManyToManyField(
         Week, related_name='weeks', blank=True,
         verbose_name=Week._meta.verbose_name_plural
