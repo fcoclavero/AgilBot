@@ -27,7 +27,8 @@
                 {% endif %}
             </div>
         </div>
-{#        <div class="m-portlet__head-tools">#}
+        <div class="m-portlet__head-tools">
+            <span style="font-size: smaller">{{ resource.create_timestamp }}</span>
 {#            <ul class="m-portlet__nav">#}
 {#                <li class="m-portlet__nav-item">#}
 {#                    <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-cloud-upload"></i></a>#}
@@ -39,7 +40,7 @@
 {#                    <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-share-alt-square"></i></a>#}
 {#                </li>#}
 {#            </ul>#}
-{#        </div>#}
+        </div>
     </div>
     <div class="m-portlet__body"
     {% if resource.type.name == 'image' %}style="margin-top: -40px;"{% endif %}>
