@@ -97,6 +97,11 @@ class Type(BaseModel):
         return self.name
 
 
+def image_filename(self, filename):
+    url = "resource/%s/%s" % (self.id, filename)
+    return url
+
+
 class Resource(BaseModel):
     name = models.CharField(
         max_length=50, blank=True, verbose_name='nombre'
@@ -107,6 +112,8 @@ class Resource(BaseModel):
     url = models.URLField(blank=True)
 
     generic_url = models.TextField(blank=True, verbose_name='url genérica')
+
+    image = models.FileField(upload_to=image_filename, null=True, blank=True)
 
     tags = models.ManyToManyField(
         Tag, related_name='resources', blank=True,
