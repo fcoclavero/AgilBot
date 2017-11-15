@@ -1,7 +1,57 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
-<div class="col-md-12">
-    <p>Acá va el contenido</p>
+{% for resource in resources %}
+<div class="m-portlet m-portlet--creative m-portlet--first m-portlet--bordered-semi" style="margin-bottom: 45px;">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+                <span class="m-portlet__head-icon m--hide">
+                    <i class="flaticon-statistics"></i>
+                </span>
+                <h3 class="m-portlet__head-text">
+                    <a href="{{ resource.url }}" target="_blank">{{ resource.url }}</a>
+                </h3>
+                {% if resource.type.name == 'link' %}
+                <h2 class="m-portlet__head-label m-portlet__head-label--primary">
+                    <span>Enlace</span>
+                </h2>
+                {% elif resource.type.name == 'image' %}
+                <h2 class="m-portlet__head-label m-portlet__head-label--success">
+                    <span>Imagen</span>
+                </h2>
+                {% else %}
+                <h2 class="m-portlet__head-label m-portlet__head-label--primary">
+                    <span>Recurso</span>
+                </h2>
+                {% endif %}
+            </div>
+        </div>
+{#        <div class="m-portlet__head-tools">#}
+{#            <ul class="m-portlet__nav">#}
+{#                <li class="m-portlet__nav-item">#}
+{#                    <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-cloud-upload"></i></a>#}
+{#                </li>#}
+{#                <li class="m-portlet__nav-item">#}
+{#                    <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-cog"></i></a>#}
+{#                </li>#}
+{#                <li class="m-portlet__nav-item">#}
+{#                    <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-share-alt-square"></i></a>#}
+{#                </li>#}
+{#            </ul>#}
+{#        </div>#}
+    </div>
+    <div class="m-portlet__body"
+    {% if resource.type.name == 'image' %}style="margin-top: -40px;"{% endif %}>
+        {% if resource.type.name == 'image' %}
+            <a href="{{ MEDIA }}{{ resource.image }}" target="_blank">
+                <img src="{{ MEDIA }}{{ resource.image }}" alt="imagen" style="max-height: 300px;">
+            </a>
+        {% else %}
+        {{ resource.description }}<br>
+        {% endif %}
+    </div>
 </div>
+
+{% endfor %}
 {% endblock %}
