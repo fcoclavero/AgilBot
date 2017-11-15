@@ -104,7 +104,7 @@ class Resource(BaseModel):
 
     description = models.TextField(blank=True, verbose_name='descripción')
 
-    url = models.URLField(blank=False)
+    url = models.URLField(blank=True)
 
     generic_url = models.TextField(blank=True, verbose_name='url genérica')
 
