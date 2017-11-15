@@ -3,3 +3,7 @@
         width: 120px;
     }
 }
+
+.m-menu__active {
+    font-weight: 600 !important;
+}

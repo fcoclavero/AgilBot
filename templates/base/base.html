@@ -1,4 +1,7 @@
 {% load staticfiles %}
+{% load static %}
+{% get_media_prefix as MEDIA %}
+
 <!DOCTYPE html>
 <html lang="es">
 	<head>
@@ -29,7 +32,7 @@
 {#		<link rel="shortcut icon" href="assets/demo/demo2/media/img/logo/favicon.ico">#}
 	</head>
     <!-- end::Body -->
-	<body class="m-page--wide m-header--fixed m-header--fixed-mobile m-footer--push m-aside--offcanvas-default"  >
+	<body class="m-page--wide m-header--fixed m-header--fixed-mobile m-footer--push m-aside--offcanvas-default">
 		<!-- begin:: Page -->
 		<div class="m-grid m-grid--hor m-grid--root m-page">
 			<!-- begin::Header -->
@@ -91,7 +94,7 @@
 											<a  href="#" class="m-menu__link ">
 												<span class="m-menu__item-here"></span>
 												<span class="m-menu__link-text">
-													Sección 1
+													Recursos
 												</span>
 											</a>
 										</li>
@@ -149,26 +152,78 @@
 		<!-- begin::Body -->
 			<div class="m-grid__item m-grid__item--fluid m-grid m-grid--hor-desktop m-grid--desktop m-body">
 				<div class="m-grid__item m-grid__item--fluid  m-grid m-grid--ver	m-container m-container--responsive m-container--xxl m-page__container">
+					<!-- BEGIN: Left Aside -->
+					<button class="m-aside-left-close m-aside-left-close--skin-light" id="m_aside_left_close_btn">
+						<i class="la la-close"></i>
+					</button>
+					<div id="m_aside_left" class="m-grid__item m-aside-left ">
+						<!-- BEGIN: Aside Menu -->
+	<div id="m_ver_menu" class="m-aside-menu  m-aside-menu--skin-light m-aside-menu--submenu-skin-light " data-menu-vertical="true" data-menu-scrollable="false" data-menu-dropdown-timeout="500">
+							<ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow ">
+{#								<li class="m-menu__section">#}
+{#									<h4 class="m-menu__section-text">#}
+{#										Departments#}
+{#									</h4>#}
+{#									<i class="m-menu__section-icon flaticon-more-v3"></i>#}
+{#								</li>#}
+								<li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+									<a href="{% url 'app:index' %}" class="m-menu__link">
+										<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+											<span></span>
+										</i>
+										<span class="m-menu__link-text m-menu__active">
+											Todos
+										</span>
+									</a>
+								</li>
+                                <hr>
+								<li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+									<a href="#" class="m-menu__link ">
+										<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+											<span></span>
+										</i>
+										<span class="m-menu__link-text">
+											Semana 2
+										</span>
+									</a>
+								</li>
+                                <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+									<a href="#" class="m-menu__link ">
+										<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+											<span></span>
+										</i>
+										<span class="m-menu__link-text">
+											Semana 1
+										</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<!-- END: Aside Menu -->
+					</div>
+					<!-- END: Left Aside -->
 					<div class="m-grid__item m-grid__item--fluid m-wrapper">
 						<!-- BEGIN: Subheader -->
 						<div class="m-subheader ">
 							<div class="d-flex align-items-center">
 								<div class="mr-auto">
-									<h3 class="m-subheader__title ">
-										Título
+									<h3 class="m-subheader__title m-subheader__title--separator">
+										Recursos
 									</h3>
+									<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+										<li class="m-nav__item m-nav__item--home">
+											<span>Todos</span>
+										</li>
+									</ul>
 								</div>
 							</div>
 						</div>
 						<!-- END: Subheader -->
 						<div class="m-content">
-							{% block content %}
-                            <div class="col-md-12">
-                                <p>Contenido</p>
-                            </div>
+                            {% block content %}
+                            <p>Contenido, recursos, cosas</p>
                             {% endblock %}
 						</div>
-
 					</div>
 				</div>
 			</div>
