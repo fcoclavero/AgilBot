@@ -106,6 +106,8 @@ class Resource(BaseModel):
 
     url = models.URLField(blank=False)
 
+    generic_url = models.TextField(blank=True, verbose_name='url genérica')
+
     tags = models.ManyToManyField(
         Tag, related_name='resources', blank=True,
         verbose_name=Tag._meta.verbose_name_plural
