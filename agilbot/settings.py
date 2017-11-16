@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'resources',
     'app',
     "rest_framework",
@@ -112,6 +113,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+SITE_ID = 1
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
@@ -125,6 +128,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # bot config
 
 TELEGRAM_BOT_HANDLERS_CONF = "bot.bot_handlers"
+TELEGRAM_BOT_TOKEN_EXPIRATION = 2 # two hours for a token to expire
 
 # # Heroku config
 #
