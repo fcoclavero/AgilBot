@@ -53,6 +53,7 @@ coverage.xml
 # Django stuff:
 *.log
 local_settings.py
+de.sqlite3
 
 # Flask stuff:
 instance/
@@ -99,3 +100,16 @@ ENV/
 
 # mypy
 .mypy_cache/
+.idea/
+
+# SQLite
+*.sqlite3
+
+# ignore generated static files
+/static/*
+
+# ignore generated media files
+/media/*
+
+# keep empty folders: static, media
+!.gitkeep
