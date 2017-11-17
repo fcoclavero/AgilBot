@@ -19,4 +19,4 @@ def search(request, words):
         queryset = models.Resource.objects.filter(description__contains=word)
         none_qs = none_qs | queryset
 
-    return render(request, 'index.html', {'resources': none_qs})
+    return render(request, 'index.html', {'resources': none_qs, 'query': words})
