@@ -32,9 +32,9 @@ class BotLogictestCase(TestCase):
                 'type': 'private',
             },
             'date': 1510944484,
-            'text': 'https://en.wikipedia.org/wiki/Kanban_(development)\
-                Kanban agile methodology for task flow management \
-                #kanban #agile #methodology #wikipedia',
+            'text': 'https://en.wikipedia.org/wiki/Kanban_(development) ' +
+                    'Kanban agile methodology for task flow management ' +
+                    '#kanban #agile #methodology #wikipedia',
             'entities': [
                 {'offset': 0, 'length': 50, 'type': 'url'},
                 {'offset': 101, 'length': 7, 'type': 'hashtag'},
@@ -55,10 +55,25 @@ class BotLogictestCase(TestCase):
             'The resource was not created'
         )
         self.assertEquals(
-            old_tags_count + 1, new_tags_count,
+            old_types_count + 1, new_types_count,
+            'The type was not created'
+        )
+        self.assertEquals(
+            old_tags_count + 4, new_tags_count,
             'The tags were not created'
         )
         self.assertEquals(
-            old_types_count + 1, new_types_count,
-            'The type was not created'
+            [resource.name for resource in Resource.objects.all()],
+            ['Kanban'],
+            'The resource created in the database is diferent than expected'
+        )
+        self.assertEquals(
+            [t.name for t in Type.objects.all()],
+            ['url'],
+            'The type created in the database is diferent than expected'
+        )
+        self.assertEquals(
+            [str(tag) for tag in Tag.objects.all()],
+            ['#Kanban', '#Agile', '#Methodology', '#Wikipedia'],
+            'The tags created in the database are different than expected'
         )

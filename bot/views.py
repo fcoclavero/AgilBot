@@ -1,5 +1,7 @@
 from django.http import HttpResponse
 
+from bot.logic import add_resource_from_msg
+
 
 class SingletonTelegramBot:
     singleton_bot = None
@@ -10,10 +12,12 @@ class SingletonTelegramBot:
 
         def handle(msg):
             content_type, chat_type, chat_id = telepot.glance(msg)
+
             print(content_type, chat_type, chat_id)
             print(msg)
 
             if content_type == 'text':
+                # add_resource_link(msg['text'])
                 bot.sendMessage(chat_id, msg['text'])
 
         TOKEN = '476757125:AAF7DQDtyeClA2wPhnqedeYa5d2USWRYJyA'
