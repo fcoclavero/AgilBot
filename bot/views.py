@@ -23,6 +23,7 @@ class SingletonTelegramBot:
 		TOKEN = '476757125:AAF7DQDtyeClA2wPhnqedeYa5d2USWRYJyA'
 
 		bot = telepot.Bot(TOKEN)
+		bot.setWebhook()
 		MessageLoop(bot, handle).run_as_thread()
 		print('Listening ...')
 
