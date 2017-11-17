@@ -38,8 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'resources',
     'app',
-    "rest_framework",
-    "telegrambot",
 ]
 
 MIDDLEWARE = [
