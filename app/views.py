@@ -11,7 +11,8 @@ def index(request):
     context = {
         'resources': resources,
         'weeks': weeks,
-        'section': 'all'
+        'section': 'all',
+        'section_text': 'Todos'
     }
     return render(request, 'index.html', context)
 
@@ -27,6 +28,7 @@ def week_view(request, id):
     context = {
         'resources': resources,
         'weeks': weeks,
-        'section': id
+        'section': id,
+        'section_text': week.name
     }
     return render(request, 'index.html', context)
