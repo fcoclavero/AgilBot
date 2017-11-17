@@ -177,26 +177,18 @@
 									</a>
 								</li>
                                 <hr>
+                                {% for week in weeks %}
 								<li class="m-menu__item " aria-haspopup="true" data-redirect="true">
 									<a href="#" class="m-menu__link ">
 										<i class="m-menu__link-bullet m-menu__link-bullet--dot">
 											<span></span>
 										</i>
 										<span class="m-menu__link-text">
-											Semana 2
+											{{ week.name }}
 										</span>
 									</a>
 								</li>
-                                <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
-									<a href="#" class="m-menu__link ">
-										<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-											<span></span>
-										</i>
-										<span class="m-menu__link-text">
-											Semana 1
-										</span>
-									</a>
-								</li>
+                                {% endfor %}
 							</ul>
 						</div>
 						<!-- END: Aside Menu -->
