@@ -17,8 +17,10 @@ class SingletonTelegramBot:
             print(msg)
 
             if content_type == 'text':
-                # add_resource_link(msg['text'])
-                bot.sendMessage(chat_id, msg['text'])
+                content_type = 'url'
+                
+            add_resource_from_msg(msg, content_type)
+            bot.sendMessage(chat_id, msg['text'])
 
         TOKEN = '476757125:AAF7DQDtyeClA2wPhnqedeYa5d2USWRYJyA'
 

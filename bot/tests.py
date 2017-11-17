@@ -65,7 +65,12 @@ class BotLogictestCase(TestCase):
         self.assertEquals(
             [resource.name for resource in Resource.objects.all()],
             ['Kanban'],
-            'The resource created in the database is diferent than expected'
+            'The resource name is diferent than expected'
+        )
+        self.assertEquals(
+            [resource.description for resource in Resource.objects.all()],
+            ['agile methodology for task flow management'],
+            'The resource descrition is diferent than expected'
         )
         self.assertEquals(
             [t.name for t in Type.objects.all()],

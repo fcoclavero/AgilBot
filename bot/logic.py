@@ -36,7 +36,7 @@ def add_resource_from_msg(msg, msg_type):
 
     resource = Resource.objects.create(
         name=name,
-        description=" ".join(description),
+        description=description,
         url=url,
         type=type_obj
     )
