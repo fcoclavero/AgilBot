@@ -21,7 +21,7 @@ class Semester(BaseModel):
         verbose_name='año'
     )
     section = models.IntegerField(
-        verbose_name='año'
+        verbose_name='section'
     )
 
     class Meta:
