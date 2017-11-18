@@ -1,9 +1,12 @@
 from resources.models import Resource, Tag, Type
 
 
-def add_resource_from_msg(msg, msg_type):
+def add_url_resource(msg):
+    if 'text' not in msg or 'entities' not in msg:
+        return False
     msg_content = msg['text']
     msg_entities = msg['entities']
+    msg_type = 'url'
     url = None
     description = msg_content
     tags = []
@@ -17,15 +20,19 @@ def add_resource_from_msg(msg, msg_type):
         elif entity['type'] == 'hashtag':
             tags.append(msg_content[initial:final])
 
+    if url is None:
+        return False
+
     # Get description and name
     description = msg_content.replace(url, '')
     for t in tags:
         description = description.replace(t, '')
-    description = description.strip()
-    [name, description] = description.split(' ', 1)
 
-    if url is None:
-        return
+    description = description.strip()
+    if description.count(' ') != 0:
+        [name, description] = description.split(' ', 1)
+    else:
+        name = description
 
     # Create Type, Resource and Tags:
     type_objects = Type.objects.filter(name=msg_type)
@@ -51,3 +58,5 @@ def add_resource_from_msg(msg, msg_type):
     for t in tags:
         tag = Tag.find_or_create_tag(t)
         resource.tags.add(tag)
+
+    return True

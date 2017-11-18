@@ -1,6 +1,6 @@
 from django.test import TestCase
 from resources.models import Resource, Tag, Type
-from .logic import add_resource_from_msg
+from .logic import add_url_resource
 
 
 # Create your tests here.
@@ -51,7 +51,7 @@ class BotUrlResourceLogicTestCase(TestCase):
         old_types_count = Type.objects.count()
 
         # Act:
-        add_resource_from_msg(self.msg, self.type)
+        add_url_resource(self.msg)
 
         # Assert:
         new_resources_count = Resource.objects.count()
@@ -107,8 +107,9 @@ class BotUrlResourceLogicTestCase(TestCase):
         old_resources_count = Resource.objects.count()
         old_tags_count = Tag.objects.count()
         old_types_count = Type.objects.count()
+
         # Act:
-        add_resource_from_msg(self.msg, self.type)
+        add_url_resource(self.msg)
 
         # Assert:
         new_resources_count = Resource.objects.count()
@@ -168,8 +169,13 @@ class BotUrlResourceLogicTestCase(TestCase):
         old_resources_count = Resource.objects.count()
         old_tags_count = Tag.objects.count()
         old_types_count = Type.objects.count()
+        self.msg['text'] = \
+            'https://en.wikipedia.org/wiki/Kanban_(development) ' + \
+            'Kanban agile methodology for task flow management ' + \
+            '#kanban #agile #methodology #wikipedia'
+
         # Act:
-        add_resource_from_msg(self.msg, self.type)
+        add_url_resource(self.msg)
 
         # Assert:
         new_resources_count = Resource.objects.count()

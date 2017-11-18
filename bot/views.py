@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 import pprint
-from bot.logic import add_resource_from_msg
+from bot.logic import add_url_resource
 
 
 class SingletonTelegramBot:
@@ -20,7 +20,7 @@ class SingletonTelegramBot:
 
             if content_type == 'text':
                 content_type = 'url'
-                add_resource_from_msg(msg, content_type)
+                add_url_resource(msg)
                 bot.sendMessage(chat_id, msg['text'])
 
         TOKEN = '476757125:AAF7DQDtyeClA2wPhnqedeYa5d2USWRYJyA'
