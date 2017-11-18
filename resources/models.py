@@ -79,6 +79,14 @@ class Tag(BaseModel):
         transformed_name = transformed_name.replace(' ', '')
         return transformed_name
 
+    @staticmethod
+    def find_or_create_tag(name):
+        transformed_name = Tag.transform_name(name)
+        tag = Tag.objects.filter(internal_name=transformed_name).first()
+        if tag is None:
+            tag = Tag.objects.create(name = transformed_name)
+        return tag
+
     def save(self, *args, **kwargs):
         self.internal_name = Tag.transform_name(str(self.name))
         super(Tag, self).save(*args, **kwargs)
