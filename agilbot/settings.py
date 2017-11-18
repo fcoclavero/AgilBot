@@ -126,11 +126,6 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static_assets'),)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
-# bot config
-
-TELEGRAM_BOT_HANDLERS_CONF = "bot.bot_handlers"
-TELEGRAM_BOT_TOKEN_EXPIRATION = 2  # two hours for a token to expire
-
 # # Heroku config
 #
 # import dj_database_url

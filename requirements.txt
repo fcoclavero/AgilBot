@@ -4,4 +4,4 @@ factory-boy
 whitenoise
 psycopg2
 gunicorn
-django-telegram-bot
+telepot
