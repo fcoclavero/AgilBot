@@ -1,9 +1,11 @@
 from resources.models import Resource, Tag, Type
-
+STATUS_IGNORED = 0
+STATUS_CREATED = 1
+STATUS_UPDATED = 2
 
 def add_url_resource(msg):
     if 'text' not in msg or 'entities' not in msg:
-        return False
+        return STATUS_IGNORED
     msg_content = msg['text']
     msg_entities = msg['entities']
     msg_type = 'url'
@@ -21,7 +23,7 @@ def add_url_resource(msg):
             tags.append(msg_content[initial:final])
 
     if url is None:
-        return False
+        return STATUS_IGNORED
 
     # Get description and name
     description = msg_content.replace(url, '')
@@ -49,14 +51,16 @@ def add_url_resource(msg):
             url=url,
             type=type_obj
         )
+        status = STATUS_CREATED
     else:
         resource = resource_search.first()
         resource.name = name
         resource.description = description
         resource.save()
+        status = STATUS_UPDATED
 
     for t in tags:
         tag = Tag.find_or_create_tag(t)
         resource.tags.add(tag)
 
-    return True
+    return status

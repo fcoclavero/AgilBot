@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 import pprint
-from bot.logic import add_url_resource
+from bot import logic
 
 
 class SingletonTelegramBot:
@@ -11,17 +11,24 @@ class SingletonTelegramBot:
         from telepot.loop import MessageLoop
 
         def handle(msg):
-            print('**************************************')
             content_type, chat_type, chat_id = telepot.glance(msg)
 
+            print('**************************************')
             print(content_type, chat_type, chat_id)
             pp = pprint.PrettyPrinter(indent=4)
             pp.pprint(msg)
 
             if content_type == 'text':
                 content_type = 'url'
-                add_url_resource(msg)
-                bot.sendMessage(chat_id, msg['text'])
+                status = logic.add_url_resource(msg)
+                if status == logic.STATUS_CREATED:
+                    bot.sendMessage(
+                        chat_id, 'El recurso fue creado con exito'
+                    )
+                elif status == logic.STATUS_UPDATED:
+                    bot.sendMessage(
+                        chat_id, 'El recurso fue modificado con exito'
+                    )
 
         TOKEN = '476757125:AAF7DQDtyeClA2wPhnqedeYa5d2USWRYJyA'
 
