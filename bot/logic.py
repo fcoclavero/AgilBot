@@ -34,12 +34,20 @@ def add_resource_from_msg(msg, msg_type):
     else:
         type_obj = type_objects.first()
 
-    resource = Resource.objects.create(
-        name=name,
-        description=description,
-        url=url,
-        type=type_obj
-    )
+    resource_search = Resource.objects.filter(url=url)
+    if resource_search.count() == 0:
+        resource = Resource.objects.create(
+            name=name,
+            description=description,
+            url=url,
+            type=type_obj
+        )
+    else:
+        resource = resource_search.first()
+        resource.name = name
+        resource.description = description
+        resource.save()
+
     for t in tags:
-        tag = Tag.objects.create(name=t)
+        tag = Tag.find_or_create_tag(t)
         resource.tags.add(tag)
