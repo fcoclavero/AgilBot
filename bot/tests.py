@@ -160,10 +160,10 @@ class BotUrlResourceLogicTestCase(TestCase):
         type = Type.objects.create(name=self.type)
         tag = Tag.objects.create(name=self.tags[0])
         resource = Resource.objects.create(
-            name = 'my_name_is',
-            url = self.url,
-            description = 'this is a terrible description',
-            type = type
+            name='my_name_is',
+            url=self.url,
+            description='this is a terrible description',
+            type=type
         )
         resource.tags.add(tag)
         old_resources_count = Resource.objects.count()

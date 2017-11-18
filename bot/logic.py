@@ -3,11 +3,14 @@ STATUS_IGNORED = 0
 STATUS_CREATED = 1
 STATUS_UPDATED = 2
 
+
 def add_url_resource(msg):
     if 'text' not in msg or 'entities' not in msg:
         return STATUS_IGNORED
     msg_content = msg['text']
     msg_entities = msg['entities']
+    date = msg['date']
+    print('date = ', date)
     msg_type = 'url'
     url = None
     description = msg_content
