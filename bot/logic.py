@@ -58,7 +58,7 @@ def associate_weeks(date, resource):
 # ------------------- Main functions -----------------
 def add_url_resource(msg):
     if 'text' not in msg or 'entities' not in msg:
-        return STATUS_IGNORED
+        return STATUS_IGNORED, None
     msg_content = msg['text']
     msg_entities = msg['entities']
     date = get_date(msg['date'])
@@ -77,7 +77,7 @@ def add_url_resource(msg):
             tags.append(msg_content[initial:final])
 
     if url is None:
-        return STATUS_IGNORED
+        return STATUS_IGNORED, None
 
     # Get description and name
     description = msg_content.replace(url, '')
