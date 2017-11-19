@@ -1,5 +1,5 @@
 from datetime import datetime
-from resources.models import Resource, Tag, Type, Week
+from resources.models import Resource, Tag, Type, Week, Semester
 STATUS_IGNORED = 0
 STATUS_CREATED = 1
 STATUS_UPDATED = 2
@@ -24,10 +24,11 @@ def create_tags_and_associate_to_resource(tags, resource):
         resource.tags.add(tag)
 
 
-def associate_weeks(date, resource):
+def associate_weeks(date, resource, chat_id):
     # If the resource was publicated within 1 or more weeks:
-    weeks = Week.objects.filter(
-        start_date__lte=date).filter(end_date__gte=date)
+    semester = Semester.objects.filter(chat_id=chat_id).first()
+    weeks = Week.objects.filter(semester=semester).\
+        filter(start_date__lte=date).filter(end_date__gte=date)
     if weeks:
         for week in weeks:
             resource.weeks.add(week)
@@ -56,7 +57,7 @@ def associate_weeks(date, resource):
 
 
 # ------------------- Main functions -----------------
-def add_url_resource(msg):
+def add_url_resource(msg, chat_id):
     if 'text' not in msg or 'entities' not in msg:
         return STATUS_IGNORED, None
     msg_content = msg['text']
@@ -113,5 +114,5 @@ def add_url_resource(msg):
     create_tags_and_associate_to_resource(tags, resource)
     weeks = []
     if status == STATUS_CREATED:
-        weeks = associate_weeks(date, resource)
+        weeks = associate_weeks(date, resource, chat_id)
     return status, weeks

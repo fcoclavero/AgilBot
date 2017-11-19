@@ -31,7 +31,7 @@ class SingletonTelegramBot:
             bot.sendMessage(chat_id, response)
 
         def create_url_resource(content_type, chat_type, chat_id, msg):
-            [status, weeks] = logic.add_url_resource(msg)
+            [status, weeks] = logic.add_url_resource(msg, chat_id)
             if status == logic.STATUS_CREATED:
                 response = 'El recurso fue creado con exito'
                 if weeks and weeks != []:

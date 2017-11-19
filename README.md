@@ -10,6 +10,7 @@ Visit: https://agilbot.herokuapp.com/
 3. List your bots: `/mybots`
 4. Select your bot
 5. Go to "Bot Settings", then "Allow Groups?" and select "Enable"
+5. Go to "Bot Settings", then "Group Privacy" and select "Disable"
 
 ### Save Bot settings in project:
 1. Go to Django Admin and login as admin:
