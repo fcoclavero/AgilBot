@@ -38,7 +38,7 @@ def associate_weeks(date, resource):
         order_by('start_date').first()
 
     w_before = Week.objects.filter(end_date__lt=date).\
-        order_by('end_date').first()
+        order_by('-end_date').first()
 
     if not w_before and w_after:
         week = w_after
