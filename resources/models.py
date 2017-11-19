@@ -24,6 +24,9 @@ class Semester(BaseModel):
     section = models.IntegerField(
         verbose_name='section'
     )
+    chat_id = models.IntegerField(
+        verbose_name='chat ID'
+    )
 
     class Meta:
         verbose_name = 'Semestre'
