@@ -40,3 +40,4 @@ class SemesterFactory(DjangoModelFactory):
 
     year = Faker('year')
     section = Faker('pyint')
+    chat_id = Faker('pyint')

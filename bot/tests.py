@@ -11,6 +11,7 @@ class BotUrlResourceLogicTestCase(TestCase):
     def setUp(self):
         """Setup of the testcase"""
         self.type = 'url'
+        self.chat_id = 376220900
         self.msg = {
             'message_id': 132,
             'from': {
@@ -52,7 +53,7 @@ class BotUrlResourceLogicTestCase(TestCase):
         old_types_count = Type.objects.count()
 
         # Act:
-        add_url_resource(self.msg)
+        add_url_resource(self.msg, self.chat_id)
 
         # Assert:
         new_resources_count = Resource.objects.count()
@@ -110,7 +111,7 @@ class BotUrlResourceLogicTestCase(TestCase):
         old_types_count = Type.objects.count()
 
         # Act:
-        add_url_resource(self.msg)
+        add_url_resource(self.msg, self.chat_id)
 
         # Assert:
         new_resources_count = Resource.objects.count()
@@ -176,7 +177,7 @@ class BotUrlResourceLogicTestCase(TestCase):
             '#kanban #agile #methodology #wikipedia'
 
         # Act:
-        add_url_resource(self.msg)
+        add_url_resource(self.msg, self.chat_id)
 
         # Assert:
         new_resources_count = Resource.objects.count()
@@ -230,6 +231,7 @@ class ResourceWeekLogicTestCase(TestCase):
 
     def setUp(self):
         """Setup of the testcase"""
+        self.chat_id = 376220900
         self.type = 'url'
         self.msg = {
             'message_id': 132,
@@ -263,7 +265,9 @@ class ResourceWeekLogicTestCase(TestCase):
         self.tags = ['#Kanban', '#Agile', '#Methodology', '#Wikipedia']
         self.name = 'Kanban'
         self.url = 'https://en.wikipedia.org/wiki/Kanban_(development)'
-        self.semester = Semester.objects.create(year=2017, section=2)
+        self.semester = Semester.objects.create(
+            year=2017, section=2, chat_id=self.chat_id
+        )
         self.weeks = [
             Week.objects.create(
                 name='Week', number=1, semester=self.semester,
@@ -286,6 +290,31 @@ class ResourceWeekLogicTestCase(TestCase):
                 end_date=datetime.strptime('2017-11-30', '%Y-%m-%d').date(),
             ),
         ]
+        self.other_semester = Semester.objects.create(
+            year=2017, section=2, chat_id=376220901
+        )
+        self.other_weeks = [
+            Week.objects.create(
+                name='Other Week', number=1, semester=self.other_semester,
+                start_date=datetime.strptime('2017-10-27', '%Y-%m-%d').date(),
+                end_date=datetime.strptime('2017-11-03', '%Y-%m-%d').date(),
+            ),
+            Week.objects.create(
+                name='Other Week', number=2, semester=self.other_semester,
+                start_date=datetime.strptime('2017-11-10', '%Y-%m-%d').date(),
+                end_date=datetime.strptime('2017-11-16', '%Y-%m-%d').date(),
+            ),
+            Week.objects.create(
+                name='Other Week', number=3, semester=self.other_semester,
+                start_date=datetime.strptime('2017-11-17', '%Y-%m-%d').date(),
+                end_date=datetime.strptime('2017-11-23', '%Y-%m-%d').date(),
+            ),
+            Week.objects.create(
+                name='Other Week', number=4, semester=self.other_semester,
+                start_date=datetime.strptime('2017-11-24', '%Y-%m-%d').date(),
+                end_date=datetime.strptime('2017-11-30', '%Y-%m-%d').date(),
+            ),
+        ]
 
     def test_resource_date_within_week(self):
         """
@@ -297,7 +326,7 @@ class ResourceWeekLogicTestCase(TestCase):
         self.msg['date'] = self.date.timestamp()
 
         # Act:
-        add_url_resource(self.msg)
+        add_url_resource(self.msg, self.chat_id)
 
         # Assert:
         new_resources_count = Resource.objects.count()
@@ -311,8 +340,8 @@ class ResourceWeekLogicTestCase(TestCase):
             self.date.date(),
             'The resource publication date is different than expected'
         )
-        self.assertTrue(
-            self.weeks[3-1] in resource.weeks.all(),
+        self.assertEquals(
+            [self.weeks[3-1]], list(resource.weeks.all()),
             'The resource was not associated to the expected week expected'
         )
 
@@ -327,7 +356,7 @@ class ResourceWeekLogicTestCase(TestCase):
         self.msg['date'] = self.date.timestamp()
 
         # Act:
-        add_url_resource(self.msg)
+        add_url_resource(self.msg, self.chat_id)
 
         # Assert:
         new_resources_count = Resource.objects.count()
@@ -341,8 +370,8 @@ class ResourceWeekLogicTestCase(TestCase):
             self.date.date(),
             'The resource publication date is different than expected'
         )
-        self.assertTrue(
-            self.weeks[1-1] in resource.weeks.all(),
+        self.assertEquals(
+            [self.weeks[1-1]], list(resource.weeks.all()),
             'The resource was not associated to the expected week expected'
         )
 
@@ -357,7 +386,7 @@ class ResourceWeekLogicTestCase(TestCase):
         self.msg['date'] = self.date.timestamp()
 
         # Act:
-        add_url_resource(self.msg)
+        add_url_resource(self.msg, self.chat_id)
 
         # Assert:
         new_resources_count = Resource.objects.count()
@@ -371,8 +400,8 @@ class ResourceWeekLogicTestCase(TestCase):
             self.date.date(),
             'The resource publication date is different than expected'
         )
-        self.assertTrue(
-            self.weeks[2-1] in resource.weeks.all(),
+        self.assertEquals(
+            [self.weeks[2-1]], list(resource.weeks.all()),
             'The resource was not associated to the expected week expected'
         )
 
@@ -400,7 +429,7 @@ class ResourceWeekLogicTestCase(TestCase):
             '#kanban #agile #methodology #wikipedia'
 
         # Act:
-        add_url_resource(self.msg)
+        add_url_resource(self.msg, self.chat_id)
 
         # Assert:
         new_resources_count = Resource.objects.count()
