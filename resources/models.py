@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 
 
@@ -44,6 +45,9 @@ class Week(BaseModel):
         verbose_name=Semester._meta.verbose_name,
         on_delete=models.SET_NULL
     )
+    start_date = models.DateField(verbose_name='Fecha de inicio')
+
+    end_date = models.DateField(verbose_name='Fecha de termino')
 
     class Meta:
         verbose_name = 'Semana'
@@ -86,7 +90,7 @@ class Tag(BaseModel):
         transformed_name = Tag.transform_name(name)
         tag = Tag.objects.filter(name=transformed_name).first()
         if tag is None:
-            tag = Tag.objects.create(name = transformed_name)
+            tag = Tag.objects.create(name=transformed_name)
         return tag
 
     def save(self, *args, **kwargs):
@@ -141,9 +145,19 @@ class Resource(BaseModel):
         verbose_name=Week._meta.verbose_name_plural
     )
 
+    publication_date = models.DateField(
+        blank=True, null=True,
+        verbose_name='Fecha de publicación'
+    )
+
     class Meta:
         verbose_name = 'Recurso'
         verbose_name_plural = 'Recursos'
 
     def __str__(self):
         return self.name + ': ' + self.url
+
+    def save(self, *args, **kwargs):
+        if self.publication_date is None:
+            self.publication_date = timezone.localtime(timezone.now())
+        super(Resource, self).save(*args, **kwargs)

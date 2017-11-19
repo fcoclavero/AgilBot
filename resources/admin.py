@@ -20,9 +20,17 @@ class TypeAdmin(admin.ModelAdmin):
     readonly_fields = ('create_timestamp', 'update_timestamp')
 
 
+class WeekAdmin(admin.ModelAdmin):
+    model = Week
+
+
+class SemesterAdmin(admin.ModelAdmin):
+    model = Semester
+
+
 # Register your models here.
 admin.site.register(Resource, ResourceAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Type, TypeAdmin)
-admin.site.register(Week)
-admin.site.register(Semester)
+admin.site.register(Week, WeekAdmin)
+admin.site.register(Semester, SemesterAdmin)
