@@ -20,12 +20,17 @@ class TypeAdmin(admin.ModelAdmin):
     readonly_fields = ('create_timestamp', 'update_timestamp')
 
 
+class WeekInlineAdmin(admin.TabularInline):
+    model = Week
+
+
 class WeekAdmin(admin.ModelAdmin):
     model = Week
 
 
 class SemesterAdmin(admin.ModelAdmin):
     model = Semester
+    inlines = (WeekInlineAdmin,)
 
 
 # Register your models here.
