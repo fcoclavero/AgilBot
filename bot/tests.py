@@ -1,5 +1,6 @@
+from datetime import datetime
 from django.test import TestCase
-from resources.models import Resource, Tag, Type
+from resources.models import Resource, Tag, Type, Semester, Week
 from .logic import add_url_resource
 
 
@@ -218,4 +219,159 @@ class BotUrlResourceLogicTestCase(TestCase):
             [str(tag) for tag in resource.tags.all()],
             self.tags,
             'The tags associated to the resource are different than expected'
+        )
+
+
+class ResourceWeekLogicTestCase(TestCase):
+    """
+    Test suite for the creation and association of Resources
+    to Weeks using the Bot
+    """
+
+    def setUp(self):
+        """Setup of the testcase"""
+        self.type = 'url'
+        self.msg = {
+            'message_id': 132,
+            'from': {
+                'id': 376220900,
+                'is_bot': False,
+                'first_name': 'Sebastián',
+                'last_name': 'Fehlandt',
+                'username': 'Sfehlandt',
+                'language_code': 'en-US',
+            },
+            'chat': {
+                'id': 376220900,
+                'first_name': 'Sebastián',
+                'last_name': 'Fehlandt',
+                'username': 'Sfehlandt',
+                'type': 'private',
+            },
+            'date': 1510944484,
+            'text': 'https://en.wikipedia.org/wiki/Kanban_(development) ' +
+                    'Kanban agile methodology for task flow management ' +
+                    '#kanban #agile #methodology #wikipedia',
+            'entities': [
+                {'offset': 0, 'length': 50, 'type': 'url'},
+                {'offset': 101, 'length': 7, 'type': 'hashtag'},
+                {'offset': 109, 'length': 6, 'type': 'hashtag'},
+                {'offset': 116, 'length': 12, 'type': 'hashtag'},
+                {'offset': 129, 'length': 10, 'type': 'hashtag'}
+            ]
+        }
+        self.tags = ['#Kanban', '#Agile', '#Methodology', '#Wikipedia']
+        self.name = 'Kanban'
+        self.url = 'https://en.wikipedia.org/wiki/Kanban_(development)'
+        self.semester = Semester.objects.create(year=2017, section=2)
+        self.weeks = [
+            Week.objects.create(
+                name='Week', number=1, semester=self.semester,
+                start_date=datetime.strptime('2017-10-27', '%Y-%m-%d').date(),
+                end_date=datetime.strptime('2017-11-03', '%Y-%m-%d').date(),
+            ),
+            Week.objects.create(
+                name='Week', number=2, semester=self.semester,
+                start_date=datetime.strptime('2017-11-10', '%Y-%m-%d').date(),
+                end_date=datetime.strptime('2017-11-16', '%Y-%m-%d').date(),
+            ),
+            Week.objects.create(
+                name='Week', number=3, semester=self.semester,
+                start_date=datetime.strptime('2017-11-17', '%Y-%m-%d').date(),
+                end_date=datetime.strptime('2017-11-23', '%Y-%m-%d').date(),
+            ),
+            Week.objects.create(
+                name='Week', number=4, semester=self.semester,
+                start_date=datetime.strptime('2017-11-24', '%Y-%m-%d').date(),
+                end_date=datetime.strptime('2017-11-30', '%Y-%m-%d').date(),
+            ),
+        ]
+
+    def test_resource_date_within_week(self):
+        """
+        Test if a resource with date within a week is associated to that week
+        """
+        # Arrange:
+        old_resources_count = Resource.objects.count()
+        self.date = datetime.strptime('2017-11-17', '%Y-%m-%d')
+        self.msg['date'] = self.date.timestamp()
+
+        # Act:
+        add_url_resource(self.msg)
+
+        # Assert:
+        new_resources_count = Resource.objects.count()
+        self.assertEquals(
+            old_resources_count + 1, new_resources_count,
+            'The resource was not created'
+        )
+        resource = Resource.objects.filter(name=self.name).first()
+        self.assertEquals(
+            resource.publication_date,
+            self.date.date(),
+            'The resource publication date is different than expected'
+        )
+        self.assertTrue(
+            self.weeks[3-1] in resource.weeks.all(),
+            'The resource was not associated to the expected week expected'
+        )
+
+    def test_resource_date_closest_week_before(self):
+        """
+        Test if a resource with date outside every week
+        is associated to the closest week before
+        """
+        # Arrange:
+        old_resources_count = Resource.objects.count()
+        self.date = datetime.strptime('2017-11-04', '%Y-%m-%d')
+        self.msg['date'] = self.date.timestamp()
+
+        # Act:
+        add_url_resource(self.msg)
+
+        # Assert:
+        new_resources_count = Resource.objects.count()
+        self.assertEquals(
+            old_resources_count + 1, new_resources_count,
+            'The resource was not created'
+        )
+        resource = Resource.objects.filter(name=self.name).first()
+        self.assertEquals(
+            resource.publication_date,
+            self.date.date(),
+            'The resource publication date is different than expected'
+        )
+        self.assertTrue(
+            self.weeks[1-1] in resource.weeks.all(),
+            'The resource was not associated to the expected week expected'
+        )
+
+    def test_resource_date_closest_week_after(self):
+        """
+        Test if a resource with date outside every week
+        is associated to the closest week after
+        """
+        # Arrange:
+        old_resources_count = Resource.objects.count()
+        self.date = datetime.strptime('2017-11-08', '%Y-%m-%d')
+        self.msg['date'] = self.date.timestamp()
+
+        # Act:
+        add_url_resource(self.msg)
+
+        # Assert:
+        new_resources_count = Resource.objects.count()
+        self.assertEquals(
+            old_resources_count + 1, new_resources_count,
+            'The resource was not created'
+        )
+        resource = Resource.objects.filter(name=self.name).first()
+        self.assertEquals(
+            resource.publication_date,
+            self.date.date(),
+            'The resource publication date is different than expected'
+        )
+        self.assertTrue(
+            self.weeks[2-1] in resource.weeks.all(),
+            'The resource was not associated to the expected week expected'
         )

@@ -45,6 +45,9 @@ class Week(BaseModel):
         verbose_name=Semester._meta.verbose_name,
         on_delete=models.SET_NULL
     )
+    start_date = models.DateField(verbose_name='Fecha de inicio')
+
+    end_date = models.DateField(verbose_name='Fecha de termino')
 
     class Meta:
         verbose_name = 'Semana'
