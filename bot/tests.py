@@ -375,3 +375,77 @@ class ResourceWeekLogicTestCase(TestCase):
             self.weeks[2-1] in resource.weeks.all(),
             'The resource was not associated to the expected week expected'
         )
+
+    def test_resource_update_ignore_weeks(self):
+        """Test if you can update a resource and ignore updating weeks"""
+        # Arrange:
+        type = Type.objects.create(name=self.type)
+        tag = Tag.objects.create(name=self.tags[0])
+        resource = Resource.objects.create(
+            name='my_name_is',
+            url=self.url,
+            description='this is a terrible description',
+            type=type
+        )
+        old_weeks = list(resource.weeks.all())
+        self.date = datetime.strptime('2017-11-17', '%Y-%m-%d')
+        self.msg['date'] = self.date.timestamp()
+        resource.tags.add(tag)
+        old_resources_count = Resource.objects.count()
+        old_tags_count = Tag.objects.count()
+        old_types_count = Type.objects.count()
+        self.msg['text'] = \
+            'https://en.wikipedia.org/wiki/Kanban_(development) ' + \
+            'Kanban agile methodology for task flow management ' + \
+            '#kanban #agile #methodology #wikipedia'
+
+        # Act:
+        add_url_resource(self.msg)
+
+        # Assert:
+        new_resources_count = Resource.objects.count()
+        new_tags_count = Tag.objects.count()
+        new_types_count = Type.objects.count()
+        self.assertEquals(
+            old_resources_count, new_resources_count,
+            'The resource was created'
+        )
+        self.assertEquals(
+            old_types_count, new_types_count,
+            'The type was re-created'
+        )
+        self.assertEquals(
+            old_tags_count + 3, new_tags_count,
+            'The number of tags created if different than expected'
+        )
+        self.assertEquals(
+            [resource.name for resource in Resource.objects.all()],
+            [self.name],
+            'The resource name is different than expected'
+        )
+        resource = Resource.objects.filter(name=self.name).first()
+        self.assertEquals(
+            resource.description,
+            'agile methodology for task flow management',
+            'The resource descrition is different than expected'
+        )
+        self.assertEquals(
+            resource.type.name,
+            self.type,
+            'The type created in the database is different than expected'
+        )
+        self.assertEquals(
+            [str(tag) for tag in Tag.objects.all()],
+            self.tags,
+            'The tags created in the database are different than expected'
+        )
+        self.assertEquals(
+            [str(tag) for tag in resource.tags.all()],
+            self.tags,
+            'The tags associated to the resource are different than expected'
+        )
+        new_weeks = list(resource.weeks.all())
+        self.assertEquals(
+            new_weeks, old_weeks,
+            'The resource weeks were updated'
+        )

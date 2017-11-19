@@ -20,11 +20,13 @@ class SingletonTelegramBot:
 
             if content_type == 'text':
                 content_type = 'url'
-                status = logic.add_url_resource(msg)
+                [status, weeks] = logic.add_url_resource(msg)
                 if status == logic.STATUS_CREATED:
-                    bot.sendMessage(
-                        chat_id, 'El recurso fue creado con exito'
-                    )
+                    response = 'El recurso fue creado con exito'
+                    if weeks and weeks != []:
+                        response = response + \
+                            ' y asociado a las semanas: ' + str(weeks)
+                    bot.sendMessage(chat_id, response)
                 elif status == logic.STATUS_UPDATED:
                     bot.sendMessage(
                         chat_id, 'El recurso fue modificado con exito'

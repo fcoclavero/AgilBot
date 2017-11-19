@@ -111,5 +111,7 @@ def add_url_resource(msg):
         status = STATUS_UPDATED
 
     create_tags_and_associate_to_resource(tags, resource)
-    associate_weeks(date, resource)
-    return status
+    weeks = []
+    if status == STATUS_CREATED:
+        weeks = associate_weeks(date, resource)
+    return status, weeks
