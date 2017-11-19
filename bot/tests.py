@@ -290,6 +290,31 @@ class ResourceWeekLogicTestCase(TestCase):
                 end_date=datetime.strptime('2017-11-30', '%Y-%m-%d').date(),
             ),
         ]
+        self.past_semester = Semester.objects.create(
+            year=2016, section=2, chat_id=376220902
+        )
+        self.past_weeks = [
+            Week.objects.create(
+                name='Past Week', number=1, semester=self.past_semester,
+                start_date=datetime.strptime('2017-10-27', '%Y-%m-%d').date(),
+                end_date=datetime.strptime('2017-11-03', '%Y-%m-%d').date(),
+            ),
+            Week.objects.create(
+                name='Past Week', number=2, semester=self.past_semester,
+                start_date=datetime.strptime('2017-11-10', '%Y-%m-%d').date(),
+                end_date=datetime.strptime('2017-11-16', '%Y-%m-%d').date(),
+            ),
+            Week.objects.create(
+                name='Past Week', number=3, semester=self.past_semester,
+                start_date=datetime.strptime('2017-11-17', '%Y-%m-%d').date(),
+                end_date=datetime.strptime('2017-11-23', '%Y-%m-%d').date(),
+            ),
+            Week.objects.create(
+                name='Past Week', number=4, semester=self.past_semester,
+                start_date=datetime.strptime('2017-11-24', '%Y-%m-%d').date(),
+                end_date=datetime.strptime('2017-11-30', '%Y-%m-%d').date(),
+            ),
+        ]
         self.other_semester = Semester.objects.create(
             year=2017, section=2, chat_id=376220901
         )
@@ -416,6 +441,7 @@ class ResourceWeekLogicTestCase(TestCase):
             description='this is a terrible description',
             type=type
         )
+        resource.weeks.add(self.past_weeks[3-1])
         old_weeks = list(resource.weeks.all())
         self.date = datetime.strptime('2017-11-17', '%Y-%m-%d')
         self.msg['date'] = self.date.timestamp()
@@ -474,7 +500,8 @@ class ResourceWeekLogicTestCase(TestCase):
             'The tags associated to the resource are different than expected'
         )
         new_weeks = list(resource.weeks.all())
+        expected_weeks = [self.weeks[3-1]] + old_weeks
         self.assertEquals(
-            new_weeks, old_weeks,
+            new_weeks, expected_weeks,
             'The resource weeks were updated'
         )

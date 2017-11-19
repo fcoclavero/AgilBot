@@ -35,11 +35,11 @@ def associate_weeks(date, resource, chat_id):
         return list(weeks)
 
     # Otherwise:
-    w_after = Week.objects.filter(start_date__gt=date).\
-        order_by('start_date').first()
+    w_after = Week.objects.filter(semester=semester).\
+        filter(start_date__gt=date).order_by('start_date').first()
 
-    w_before = Week.objects.filter(end_date__lt=date).\
-        order_by('-end_date').first()
+    w_before = Week.objects.filter(semester=semester).\
+        filter(end_date__lt=date).order_by('-end_date').first()
 
     if not w_before and w_after:
         week = w_after
@@ -113,6 +113,6 @@ def add_url_resource(msg, chat_id):
 
     create_tags_and_associate_to_resource(tags, resource)
     weeks = []
-    if status == STATUS_CREATED:
-        weeks = associate_weeks(date, resource, chat_id)
+    # if status == STATUS_CREATED:
+    weeks = associate_weeks(date, resource, chat_id)
     return status, weeks
