@@ -73,14 +73,33 @@ class TagModelTestCase(TestCase):
             self.old_count - 1, self.new_count, 'The Tag was not deleted'
         )
 
-    def test_model_tag_internal_name(self):
-        """Test if the tag's internal_name is defined properly"""
+    def test_model_tag_name(self):
+        """Test if the tag's name is defined properly"""
         # Act
         self.tag = TagFactory(name='thIs-is.a_tAg')
         # Assert
         self.assertEquals(
-            self.tag.internal_name, 'ThisIsATag',
-            'The internal_name of the Tag is incorrect'
+            self.tag.name, '#ThisIsATag',
+            'The name of the Tag is incorrect'
+        )
+
+    def test_model_find_or_create_tag(self):
+        """Test the find_or_create_tag"""
+        # Arrange:
+        self.old_tag = TagFactory(name='#ThisIsATag')
+        self.old_count = Tag.objects.count()
+        tag_names = ['#ThisIsATag', '#ThisIsAlsoATag']
+        # Act
+        self.new_tags = [Tag.find_or_create_tag(t) for t in tag_names]
+        # Assert
+        self.new_count = Tag.objects.count()
+        self.assertEquals(
+            self.old_count + 1, self.new_count,
+            'The number of new Tags is incorrect'
+        )
+        self.assertEquals(
+            self.old_tag.name, '#ThisIsATag',
+            'The name of the Tag is incorrect'
         )
 
 
