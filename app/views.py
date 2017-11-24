@@ -38,7 +38,11 @@ def search(request, words):
     none_qs = models.Resource.objects.none()
     for word in words.split(" "):
         queryset = models.Resource.objects.filter(description__contains=word)
-        none_qs = none_qs | queryset
+        queryseturl = models.Resource.objects.filter(url__contains=word)
+        none_qs = none_qs | queryset | queryseturl
+        for tag in models.Tag.objects.filter(name__contains=word):
+            queryset2 = tag.resources.all()
+            none_qs = none_qs | queryset2
 
     context = {
         'resources': none_qs,
