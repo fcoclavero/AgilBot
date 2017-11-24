@@ -7,13 +7,6 @@ document.getElementById('search_input').onkeypress = function (e) {
     }
 };
 
-$("#search_input").keyup(function (event) {
-    console.log("presion");
-    if (event.keyCode === 13) {
-        $("#search_button").click();
-    }
-});
-
 function search() {
     if (document.getElementById('search_input').value.trim()) {
         window.location.href = "/search/" + document.getElementById('search_input').value.replace(/#/g,"");
@@ -21,3 +14,10 @@ function search() {
         window.location.href = "/"
     }
 }
+
+$("#search_input").keyup(function (event) {
+    console.log("presion");
+    if (event.keyCode === 13) {
+        search();
+    }
+});
