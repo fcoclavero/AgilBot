@@ -53,7 +53,10 @@
     {% if resource.type.name == 'image' %}style="margin-top: -40px;"{% endif %}>
 
         {{ resource.description }}<br>
-
+        <br>
+        {% for tag in resource.tags.all %}
+            <a href="" class="m--font-bolder">{{ tag }}</a>
+        {% endfor %}
         {% if resource.type.name == 'image' %}
             <a href="{{ MEDIA }}{{ resource.image }}" target="_blank">
                 <img src="{{ MEDIA }}{{ resource.image }}" alt="imagen" style="max-height: 300px;">
