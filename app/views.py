@@ -2,7 +2,7 @@ from django.http import Http404
 from django.shortcuts import render
 
 from resources import models
-from itertools import chain
+
 
 def index(request):
     resources = models.Resource.objects.all().order_by('-create_timestamp')
@@ -17,26 +17,24 @@ def index(request):
     return render(request, 'index.html', context)
 
 
-def week_view(request, id):
-    if not models.Week.objects.filter(id=id):
+def week_view(request, pk):
+    if not models.Week.objects.filter(id=pk):
         raise Http404('No existe esa semana')
 
-    week = models.Week.objects.get(id=id)
+    week = models.Week.objects.get(id=pk)
     resources = models.Resource.objects.filter(weeks=week).order_by('-create_timestamp')
     weeks = models.Week.objects.all().order_by('-number')
 
     context = {
         'resources': resources,
         'weeks': weeks,
-        'section': id,
+        'section': pk,
         'section_text': week.name
     }
     return render(request, 'index.html', context)
 
 
 def search(request, words):
-    # resources = models.Resource.objects.filter()
-    resources = models.Resource.objects.all()
     none_qs = models.Resource.objects.none()
     for word in words.split(" "):
         queryset = models.Resource.objects.filter(description__contains=word)

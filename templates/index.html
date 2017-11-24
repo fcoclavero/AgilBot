@@ -12,19 +12,23 @@
                 <h3 class="m-portlet__head-text">
                     <a href="{{ resource.url }}" target="_blank">{{ resource.url }}</a>
                 </h3>
+
                 {% if resource.type.name == 'link' %}
                 <h2 class="m-portlet__head-label m-portlet__head-label--primary">
                     <span>Enlace</span>
                 </h2>
+
                 {% elif resource.type.name == 'image' %}
                 <h2 class="m-portlet__head-label m-portlet__head-label--success">
                     <span>Imagen</span>
                 </h2>
+
                 {% else %}
                 <h2 class="m-portlet__head-label m-portlet__head-label--primary">
                     <span>Recurso</span>
                 </h2>
                 {% endif %}
+
             </div>
         </div>
         <div class="m-portlet__head-tools">
@@ -47,13 +51,15 @@
     </div>
     <div class="m-portlet__body"
     {% if resource.type.name == 'image' %}style="margin-top: -40px;"{% endif %}>
+
+        {{ resource.description }}<br>
+
         {% if resource.type.name == 'image' %}
             <a href="{{ MEDIA }}{{ resource.image }}" target="_blank">
                 <img src="{{ MEDIA }}{{ resource.image }}" alt="imagen" style="max-height: 300px;">
             </a>
-        {% else %}
-        {{ resource.description }}<br>
         {% endif %}
+
     </div>
 </div>
 

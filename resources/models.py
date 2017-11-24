@@ -111,8 +111,6 @@ class Resource(BaseModel):
 
     url = models.URLField(blank=True)
 
-    generic_url = models.TextField(blank=True, verbose_name='url genérica')
-
     image = models.FileField(upload_to=image_filename, null=True, blank=True)
 
     tags = models.ManyToManyField(
