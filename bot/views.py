@@ -20,6 +20,13 @@ class SingletonTelegramBot:
             pp.pprint(msg)
 
             if content_type == 'text':
+                # Get commands - must be the first entity of msg for now
+                entity = msg['entities'][0]
+                if entity['type'] == "bot_command":
+                    command = msg['text'][entity['offset']:entity['length']]
+                    if command == "/help":
+                        bot.sendMessage(chat_id, "Para agregar un recurso, simplemente manda un mensaje con un link. Puedes agregar tags al recurso anteponiendo un # al tag, por ejemplo '#tag'. Los links y tags pueden estar en cualquier parte del mensaje. Cualquier otra palabra en el mismo mensaje será incluído en la descripción del recurso.")
+
                 if 'chat_id' in msg['text']:
                     send_chat_id(chat_id)
                 else:
