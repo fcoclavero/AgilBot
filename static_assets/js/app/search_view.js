@@ -16,7 +16,7 @@ $("#search_input").keyup(function (event) {
 
 function search() {
     if (document.getElementById('search_input').value.trim()) {
-        window.location.href = "/search/" + document.getElementById('search_input').value;
+        window.location.href = "/search/" + document.getElementById('search_input').value.replace(/#/g,"");
     } else {
         window.location.href = "/"
     }
