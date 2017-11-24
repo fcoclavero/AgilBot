@@ -112,17 +112,17 @@
 									</ul>
 								</div>
 							</div>
-							<!-- end::Horizontal Menu -->	
+							<!-- end::Horizontal Menu -->
 				<!--begin::Search-->
 							<div class="m-stack__item m-stack__item--middle m-dropdown m-dropdown--arrow m-dropdown--large m-dropdown--mobile-full-width m-dropdown--align-right m-dropdown--skin-light m-header-search m-header-search--expandable m-header-search--skin-" id="m_quicksearch" data-search-type="default">
 								<!--begin::Search Form -->
-								<form class="m-header-search__form">
+								<form class="m-header-search__form" method="GET" action="{% url "app:search" "das" %}">
 									<div class="m-header-search__wrapper">
-										<span class="m-header-search__icon-search" id="m_quicksearch_search">
+										<span class="m-header-search__icon-search" id="search_button" onclick="search()">
 											<i class="la la-search"></i>
 										</span>
 										<span class="m-header-search__input-wrapper">
-											<input autocomplete="off" type="text" name="q" class="m-header-search__input" value="" placeholder="Búsqueda..." id="search_input">
+											<input autocomplete="off" type="text" name="search_input" class="m-header-search__input" value="{{ query }}" placeholder="Búsqueda..." id="search_input">
 										</span>
 										<span class="m-header-search__icon-close" id="m_quicksearch_close">
 											<i class="la la-remove"></i>
@@ -151,7 +151,7 @@
 					</div>
 				</div>
 			</header>
-			<!-- end::Header -->		
+			<!-- end::Header -->
 		<!-- begin::Body -->
 			<div class="m-grid__item m-grid__item--fluid m-grid m-grid--hor-desktop m-grid--desktop m-body">
 				<div class="m-grid__item m-grid__item--fluid  m-grid m-grid--ver	m-container m-container--responsive m-container--xxl m-page__container">
@@ -263,7 +263,10 @@
 		<script src="{% static 'js/theme/scripts.bundle.js' %}" type="text/javascript"></script>
 
 		<script src="{% static 'js/theme/fullcalendar.bundle.js' %}" type="text/javascript"></script>
-        <!--end::Scripts -->
+        <script src="{% static 'js/app/search_view.js' %}" type="text/javascript">
+
+        </script>
+		<!--end::Page Vendors -->
 	</body>
 	<!-- end::Body -->
 </html>

@@ -30,6 +30,8 @@ class WeekFactory(DjangoModelFactory):
 
     name = Faker('word')
     number = Faker('pyint')
+    start_date = Faker('date')
+    end_date = Faker('date')
 
 
 class SemesterFactory(DjangoModelFactory):
@@ -38,3 +40,4 @@ class SemesterFactory(DjangoModelFactory):
 
     year = Faker('year')
     section = Faker('pyint')
+    chat_id = Faker('pyint')

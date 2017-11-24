@@ -1,0 +1,137 @@
+[
+	{
+		"model": "resources.semester", 
+		"pk": 1, 
+		"fields": 
+		{
+			"create_timestamp": "2017-11-17T14:28:16.976Z", 
+			"update_timestamp": "2017-11-17T14:28:16.976Z",
+		 	"year": 2017, 
+			"section": 1
+		}
+	}, 
+	{
+		"model": "resources.week",
+		"pk": 1,
+		"fields":
+		{
+			"create_timestamp": "2017-11-17T14:28:21.808Z", 
+		  	"update_timestamp": "2017-11-17T14:38:52.683Z", 
+			"name": "Semana 1", 
+			"number": 1, 
+			"semester": 1
+		}
+	},
+	{
+		"model": "resources.week",
+ 		"pk": 2, 
+ 		"fields":
+ 		{
+ 			"create_timestamp": "2017-11-17T14:28:28.871Z", 
+ 			"update_timestamp": "2017-11-17T14:38:56.685Z", 
+			"name": "Semana 2", 
+			"number": 2, 
+			"semester": 1
+		}
+	},
+	{
+		"model": "resources.week", 
+		"pk": 3, 
+		"fields": 
+		{
+			"create_timestamp": "2017-11-17T14:28:33.988Z", 
+			"update_timestamp": "2017-11-17T14:39:01.157Z", 
+			"name": "Semana 3", 
+			"number": 3, 
+			"semester": 1
+		}
+	}, 
+	{
+		"model": "resources.type",
+ 		"pk": 1, 
+ 		"fields": 
+ 		{
+ 			"create_timestamp": "2017-11-15T19:02:02.139Z", 
+ 			"update_timestamp": "2017-11-15T19:34:11.892Z", 
+			"name": "link"
+		}
+	}, 
+	{
+		"model": "resources.type",
+ 		"pk": 2,
+  		"fields": 
+  		{
+  			"create_timestamp": "2017-11-15T19:26:47.306Z",
+   			"update_timestamp": "2017-11-15T19:26:47.306Z", 
+			"name": "image"
+		}
+	}, 
+	{
+		"model": "resources.resource", 
+		"pk": 1, 
+		"fields":
+		{
+			"create_timestamp": "2017-11-15T19:02:10.956Z", 
+			"update_timestamp": "2017-11-17T14:34:36.941Z", 
+			"name": "", 
+			"description": "Echa un vistazo al Tweet de @ThePracticalDev: https://twitter.com/ThePracticalDev/status/913629926686937093?s=09",
+ 			"url": "https://twitter.com/ThePracticalDev/status/913629926686937093?s=09", 
+			"generic_url": "", 
+			"image": "", 
+			"type": 1, 
+			"tags": [],
+ 			"weeks": [1]
+ 		}
+	}, 
+	{
+		"model": "resources.resource",
+ 		"pk": 2,
+  		"fields": 
+  		{
+  			"create_timestamp": "2017-11-15T19:33:11.264Z", 
+  			"update_timestamp": "2017-11-17T14:34:42.188Z", 
+			"name": "", 
+			"description": "", 
+			"url": "", 
+			"generic_url": "blob:https://web.telegram.org/760f68c7-47ea-4ce4-a80a-17d516178630", 
+			"image": "resource/2/760f68c7-47ea-4ce4-a80a-17d516178630.jpg", 
+			"type": 2, 
+			"tags": [], 
+			"weeks": [2]
+		}
+	}, 
+	{
+		"model": "resources.resource",
+ 		"pk": 3, 
+ 		"fields": 
+ 		{
+ 			"create_timestamp": "2017-11-17T13:34:22.853Z",
+  			"update_timestamp": "2017-11-17T14:34:46.283Z", 
+			"name": "", 
+			"description": "El objetivo de nuestra to do list es tener una plataforma que nos permite tener conexi\u00f3n lo mas directa posible, como lo explica Bret Victor en este video", 
+			"url": "https://drive.google.com/file/d/0B2d43jac4M4EMDQ4cDM3TWR0OEU/view?usp=sharing",
+ 			"generic_url": "",
+  			"image": "",
+   			"type": 1, 
+			"tags": [],
+ 			"weeks": [3]
+ 		}
+	}, 
+	{
+		"model": "resources.resource",
+ 		"pk": 4,
+  		"fields": 
+  		{
+  			"create_timestamp": "2017-11-17T13:42:08.637Z",
+   			"update_timestamp": "2017-11-17T14:34:51.760Z",
+    		"name": "",
+     		"description": "Video con los Mapas de Aprendizaje vistos ayer",
+      		"url": "https://goo.gl/photos/AZDN6ohqvJnZoF8A7",
+       		"generic_url": "",
+        	"image": "",
+         	"type": 1, 
+     		"tags": [], 
+ 			"weeks": [3]
+ 		}
+	}
+]
