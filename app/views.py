@@ -37,10 +37,10 @@ def week_view(request, pk):
 def search(request, words):
     none_qs = models.Resource.objects.none()
     for word in words.split(" "):
-        queryset = models.Resource.objects.filter(description__contains=word)
-        queryseturl = models.Resource.objects.filter(url__contains=word)
+        queryset = models.Resource.objects.filter(description__icontains=word)
+        queryseturl = models.Resource.objects.filter(url__icontains=word)
         none_qs = none_qs | queryset | queryseturl
-        for tag in models.Tag.objects.filter(name__contains=word):
+        for tag in models.Tag.objects.filter(name__icontains=word):
             queryset2 = tag.resources.all()
             none_qs = none_qs | queryset2
 
