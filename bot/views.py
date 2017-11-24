@@ -23,7 +23,7 @@ class SingletonTelegramBot:
                 if 'chat_id' in msg['text']:
                     send_chat_id(chat_id)
                 else:
-                    content_type = 'url'
+                    content_type = 'link' # TODO: cambiar hardcodeado D:
                     create_url_resource(content_type, chat_type, chat_id, msg)
 
         def send_chat_id(chat_id):

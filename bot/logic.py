@@ -67,6 +67,7 @@ def add_url_resource(msg, chat_id):
     url = None
     description = msg_content
     tags = []
+    mentions = []
 
     # Get url and tags:
     for entity in msg_entities:
@@ -76,6 +77,8 @@ def add_url_resource(msg, chat_id):
             url = msg_content[initial:final]
         elif entity['type'] == 'hashtag':
             tags.append(msg_content[initial:final])
+        elif entity['type'] == 'mention':
+            mentions.append(msg_content[initial:final])
 
     if url is None:
         return STATUS_IGNORED, None
@@ -84,6 +87,8 @@ def add_url_resource(msg, chat_id):
     description = msg_content.replace(url, '')
     for t in tags:
         description = description.replace(t, '')
+    for m in mentions:
+        description = description.replace(m, '')
 
     description = description.strip()
     if description.count(' ') != 0:
