@@ -91,10 +91,13 @@ def add_url_resource(msg, chat_id):
         description = description.replace(m, '')
 
     description = description.strip()
-    if description.count(' ') != 0:
-        [name, description] = description.split(' ', 1)
-    else:
-        name = description
+
+    name = "Nuevo recurso"
+
+#    if description.count(' ') != 0:
+#        [name, description] = description.split(' ', 1)
+#    else:
+#        name = description
 
     # Create Type, Resource and Tags:
     type_obj = create_type(msg_type)
