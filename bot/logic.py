@@ -6,68 +6,68 @@ from telepot.loop import MessageLoop
 
 from bot.constants import *
 from bot.models import Bot
-from resources.models import Resource, Tag, Type, Week, Semester
+from resources.models import Resource, Semester, Tag, Type, Week
 
 
 class SingletonTelegramBot:
 	singleton_bot = None
 
+	@classmethod
+	def init_bot(cls):
+		if not cls.singleton_bot:
+			cls.singleton_bot = SingletonTelegramBot()
+		return cls.singleton_bot
+
 	def __init__(self):
-
-		def handle(msg):
-			content_type, chat_type, chat_id = telepot.glance(msg)
-
-			print('**************************************')
-			print(content_type, chat_type, chat_id)
-			pp = pprint.PrettyPrinter(indent=4)
-			pp.pprint(msg)
-
-			if content_type == 'text':
-				# Get commands - must be the first entity of msg for now
-				entity = msg['entities'][0]
-				if entity['type'] == "bot_command":
-					command = msg['text'][entity['offset']:entity['length']]
-					if command == "/help":
-						bot.sendMessage(
-							chat_id,
-							HELP_RESPONSE
-						)
-
-				if 'chat_id' in msg['text']:
-					send_chat_id(chat_id)
-				else:
-					content_type = 'link'  # TODO: cambiar hardcodeado D:
-					create_url_resource(content_type, chat_type, chat_id, msg)
-
-		def send_chat_id(chat_id):
-			response = 'El id de este chat es el siguiente: ' + str(chat_id)
-			bot.sendMessage(chat_id, response)
-
-		def create_url_resource(content_type, chat_type, chat_id, msg):
-			[status, weeks] = add_url_resource(msg, chat_id)
-			if status == STATUS_CREATED:
-				response = 'El recurso fue creado con exito'
-				if weeks and weeks != []:
-					response = response + \
-							   ' y asociado a las semanas: ' + str(weeks)
-				bot.sendMessage(chat_id, response)
-			elif status == STATUS_UPDATED:
-				bot.sendMessage(
-					chat_id, 'El recurso fue modificado con exito'
-				)
-
 		TOKEN = Bot.get_token()
-
-		bot = telepot.Bot(TOKEN)
-		bot.setWebhook()
-		MessageLoop(bot, handle).run_as_thread()
+		self.bot = telepot.Bot(TOKEN)
+		self.bot.setWebhook()
+		MessageLoop(self.bot, self.handle_msg).run_as_thread()
 		print('Listening ...')
 
-	@classmethod
-	def init_bot(self):
-		if not self.singleton_bot:
-			self.singleton_bot = SingletonTelegramBot()
-		return self.singleton_bot
+	def handle_msg(self, msg):
+		content_type, chat_type, chat_id = telepot.glance(msg)
+
+		print('**************************************')
+		print(content_type, chat_type, chat_id)
+		pp = pprint.PrettyPrinter(indent=4)
+		pp.pprint(msg)
+
+		if 'text' not in msg or 'entities' not in msg:
+			return STATUS_IGNORED, None
+
+		url, description, tags, mentions, commands = parse_msg(msg)
+
+		if content_type == 'text':
+			for command in commands:
+				if command == HELP_COMMAND:
+					self.bot.sendMessage(
+						chat_id,
+						HELP_RESPONSE
+					)
+
+			if 'chat_id' in msg['text']:
+				self.send_chat_id(chat_id)
+			else:
+				content_type = 'link'
+				self.create_url_resource(content_type, chat_type, chat_id, msg)
+
+	def send_chat_id(self, chat_id):
+		response = ID_RESPONSE + str(chat_id)
+		self.bot.sendMessage(chat_id, response)
+
+	def create_url_resource(self, content_type, chat_type, chat_id, msg):
+		[status, weeks] = add_url_resource(msg, chat_id)
+		if status == STATUS_CREATED:
+			response = CREATION_RESPONSE
+			if weeks and weeks != []:
+				response = response + \
+						   ' y asociado a las semanas: ' + str(weeks)
+			self.bot.sendMessage(chat_id, response)
+		elif status == STATUS_UPDATED:
+			self.bot.sendMessage(
+				chat_id, MODIFICATION_RESPONSE
+			)
 
 
 def get_date(date):
@@ -89,7 +89,7 @@ def create_tags_and_associate_to_resource(tags, resource):
 
 
 def associate_weeks(date, resource, chat_id):
-	# If the resource was publicated within 1 or more weeks:
+	# If the resource was published within 1 or more weeks:
 	semester = Semester.objects.filter(chat_id=chat_id).first()
 	weeks = Week.objects.filter(semester=semester). \
 		filter(start_date__lte=date).filter(end_date__gte=date)
@@ -120,18 +120,14 @@ def associate_weeks(date, resource, chat_id):
 	return [week]
 
 
-# ------------------- Main functions -----------------
-def add_url_resource(msg, chat_id):
-	if 'text' not in msg or 'entities' not in msg:
-		return STATUS_IGNORED, None
-	msg_content = msg['text']
-	msg_entities = msg['entities']
-	date = get_date(msg['date'])
-	msg_type = 'url'
+def parse_msg(msg):
 	url = None
-	description = msg_content
 	tags = []
 	mentions = []
+	commands = []
+
+	msg_content = msg['text']
+	msg_entities = msg['entities']
 
 	# Get url and tags:
 	for entity in msg_entities:
@@ -143,11 +139,10 @@ def add_url_resource(msg, chat_id):
 			tags.append(msg_content[initial:final])
 		elif entity['type'] == 'mention':
 			mentions.append(msg_content[initial:final])
+		elif entity['type'] == 'bot_command':
+			commands.append(msg_content[initial:final])
 
-	if url is None:
-		return STATUS_IGNORED, None
-
-	# Get description and name
+	# Get description: all text not belonging to an entity
 	description = msg_content.replace(url, '')
 	for t in tags:
 		description = description.replace(t, '')
@@ -156,7 +151,16 @@ def add_url_resource(msg, chat_id):
 
 	description = description.strip()
 
-	name = "Nuevo recurso"	
+	return url, description, tags, mentions, commands
+
+
+def add_url_resource(msg, chat_id):
+	date = get_date(msg['date'])
+	msg_type = 'url'
+
+	url, description, tags, mentions, commands = parse_msg(msg)
+
+	name = "Nuevo recurso"
 
 	# Create Type, Resource and Tags:
 	type_obj = create_type(msg_type)
@@ -179,7 +183,6 @@ def add_url_resource(msg, chat_id):
 		status = STATUS_UPDATED
 
 	create_tags_and_associate_to_resource(tags, resource)
-	weeks = []
-	# if status == STATUS_CREATED:
 	weeks = associate_weeks(date, resource, chat_id)
+
 	return status, weeks
