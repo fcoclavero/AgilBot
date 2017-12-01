@@ -39,13 +39,14 @@ class SingletonTelegramBot:
 		url, description, tags, mentions, commands = parse_msg(msg)
 
 		if content_type == 'text':
+			# Handle bot commands
 			for command in commands:
 				if command == HELP_COMMAND:
 					self.bot.sendMessage(
 						chat_id,
 						HELP_RESPONSE
 					)
-
+			# Manage links
 			if 'chat_id' in msg['text']:
 				self.send_chat_id(chat_id)
 			else:
@@ -143,11 +144,15 @@ def parse_msg(msg):
 			commands.append(msg_content[initial:final])
 
 	# Get description: all text not belonging to an entity
-	description = msg_content.replace(url, '')
+	description = msg_content
+	if url is not None:
+		description = msg_content.replace(url, '')
 	for t in tags:
 		description = description.replace(t, '')
 	for m in mentions:
 		description = description.replace(m, '')
+	for c in commands:
+		description = description.replace(c, '')
 
 	description = description.strip()
 
