@@ -24,7 +24,7 @@ class Semester(BaseModel):
     section = models.IntegerField(
         verbose_name='section'
     )
-    chat_id = models.IntegerField(
+    chat_id = models.BigIntegerField(
         verbose_name='chat ID'
     )
 
