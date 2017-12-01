@@ -49,9 +49,10 @@ class SingletonTelegramBot:
 			# Manage links
 			if 'chat_id' in msg['text']:
 				self.send_chat_id(chat_id)
-			else:
+			elif url is not None:
 				content_type = 'link'
 				self.create_url_resource(content_type, chat_type, chat_id, msg)
+
 
 	def send_chat_id(self, chat_id):
 		response = ID_RESPONSE + str(chat_id)
