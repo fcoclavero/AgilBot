@@ -71,15 +71,10 @@ class BotUrlResourceLogicTestCase(TestCase):
             old_tags_count + 4, new_tags_count,
             'The tags were not created'
         )
-        self.assertEquals(
-            [resource.name for resource in Resource.objects.all()],
-            [self.name],
-            'The resource name is different than expected'
-        )
-        resource = Resource.objects.filter(name=self.name).first()
+        resource = Resource.objects.filter(url=self.url).first()
         self.assertEquals(
             resource.description,
-            'agile methodology for task flow management',
+            'Kanban agile methodology for task flow management',
             'The resource descrition is different than expected'
         )
         self.assertEquals(
@@ -129,15 +124,10 @@ class BotUrlResourceLogicTestCase(TestCase):
             old_tags_count + 3, new_tags_count,
             'The number of tags created if different than expected'
         )
-        self.assertEquals(
-            [resource.name for resource in Resource.objects.all()],
-            [self.name],
-            'The resource name is different than expected'
-        )
-        resource = Resource.objects.filter(name=self.name).first()
+        resource = Resource.objects.filter(url=self.url).first()
         self.assertEquals(
             resource.description,
-            'agile methodology for task flow management',
+            'Kanban agile methodology for task flow management',
             'The resource descrition is different than expected'
         )
         self.assertEquals(
@@ -195,15 +185,10 @@ class BotUrlResourceLogicTestCase(TestCase):
             old_tags_count + 3, new_tags_count,
             'The number of tags created if different than expected'
         )
-        self.assertEquals(
-            [resource.name for resource in Resource.objects.all()],
-            [self.name],
-            'The resource name is different than expected'
-        )
-        resource = Resource.objects.filter(name=self.name).first()
+        resource = Resource.objects.filter(url=self.url).first()
         self.assertEquals(
             resource.description,
-            'agile methodology for task flow management',
+            'Kanban agile methodology for task flow management',
             'The resource descrition is different than expected'
         )
         self.assertEquals(
@@ -359,7 +344,7 @@ class ResourceWeekLogicTestCase(TestCase):
             old_resources_count + 1, new_resources_count,
             'The resource was not created'
         )
-        resource = Resource.objects.filter(name=self.name).first()
+        resource = Resource.objects.filter(url=self.url).first()
         self.assertEquals(
             resource.publication_date,
             self.date.date(),
@@ -389,7 +374,7 @@ class ResourceWeekLogicTestCase(TestCase):
             old_resources_count + 1, new_resources_count,
             'The resource was not created'
         )
-        resource = Resource.objects.filter(name=self.name).first()
+        resource = Resource.objects.filter(url=self.url).first()
         self.assertEquals(
             resource.publication_date,
             self.date.date(),
@@ -419,7 +404,7 @@ class ResourceWeekLogicTestCase(TestCase):
             old_resources_count + 1, new_resources_count,
             'The resource was not created'
         )
-        resource = Resource.objects.filter(name=self.name).first()
+        resource = Resource.objects.filter(url=self.url).first()
         self.assertEquals(
             resource.publication_date,
             self.date.date(),
@@ -473,15 +458,10 @@ class ResourceWeekLogicTestCase(TestCase):
             old_tags_count + 3, new_tags_count,
             'The number of tags created if different than expected'
         )
-        self.assertEquals(
-            [resource.name for resource in Resource.objects.all()],
-            [self.name],
-            'The resource name is different than expected'
-        )
-        resource = Resource.objects.filter(name=self.name).first()
+        resource = Resource.objects.filter(url=self.url).first()
         self.assertEquals(
             resource.description,
-            'agile methodology for task flow management',
+            'Kanban agile methodology for task flow management',
             'The resource descrition is different than expected'
         )
         self.assertEquals(
