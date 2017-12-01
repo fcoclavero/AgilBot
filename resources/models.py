@@ -142,8 +142,9 @@ class Resource(BaseModel):
     )
 
     weeks = models.ManyToManyField(
-        Week, related_name='weeks', blank=True,
-        verbose_name=Week._meta.verbose_name_plural
+        Week, related_name='weeks', blank=True, null=True,
+        verbose_name=Week._meta.verbose_name_plural,
+        on_delete=models.SET_NULL
     )
 
     publication_date = models.DateField(
