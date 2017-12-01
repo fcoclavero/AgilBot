@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 
 
@@ -21,7 +22,10 @@ class Semester(BaseModel):
         verbose_name='año'
     )
     section = models.IntegerField(
-        verbose_name='año'
+        verbose_name='section'
+    )
+    chat_id = models.BigIntegerField(
+        verbose_name='chat ID'
     )
 
     class Meta:
@@ -44,6 +48,9 @@ class Week(BaseModel):
         verbose_name=Semester._meta.verbose_name,
         on_delete=models.SET_NULL
     )
+    start_date = models.DateField(verbose_name='Fecha de inicio')
+
+    end_date = models.DateField(verbose_name='Fecha de termino')
 
     class Meta:
         verbose_name = 'Semana'
@@ -57,30 +64,40 @@ class Tag(BaseModel):
     name = models.CharField(
         max_length=50, blank=True, verbose_name='nombre'
     )
-    internal_name = models.CharField(
-        max_length=50, blank=True, editable=False,
-        verbose_name='nombre interno'
-    )
 
     class Meta:
         verbose_name = 'Etiqueta'
         verbose_name_plural = 'Etiquetas'
 
     def __str__(self):
-        return self.internal_name
+        return self.name
 
     @staticmethod
     def transform_name(name):
-        transformed_name = name
-        transformed_name = transformed_name.replace('-', ' ')
-        transformed_name = transformed_name.replace('_', ' ')
-        transformed_name = transformed_name.replace('.', ' ')
-        transformed_name = transformed_name.title()
-        transformed_name = transformed_name.replace(' ', '')
-        return transformed_name
+        separators = [' ', '-', '_', '.', ',']
+        if any(s in name for s in separators):
+            for s in separators[1:]:
+                name = name.replace(s, ' ')
+            name = name.title()
+            name = name.replace(' ', '')
+
+        if name[0] != '#':
+            name = '#' + name
+
+        if len(name) > 2:
+            name = name[0] + name[1].upper() + name[2:]
+        return name
+
+    @staticmethod
+    def find_or_create_tag(name):
+        transformed_name = Tag.transform_name(name)
+        tag = Tag.objects.filter(name=transformed_name).first()
+        if tag is None:
+            tag = Tag.objects.create(name=transformed_name)
+        return tag
 
     def save(self, *args, **kwargs):
-        self.internal_name = Tag.transform_name(str(self.name))
+        self.name = Tag.transform_name(str(self.name))
         super(Tag, self).save(*args, **kwargs)
 
 
@@ -111,8 +128,6 @@ class Resource(BaseModel):
 
     url = models.URLField(blank=True)
 
-    generic_url = models.TextField(blank=True, verbose_name='url genérica')
-
     image = models.FileField(upload_to=image_filename, null=True, blank=True)
 
     tags = models.ManyToManyField(
@@ -131,9 +146,19 @@ class Resource(BaseModel):
         verbose_name=Week._meta.verbose_name_plural
     )
 
+    publication_date = models.DateField(
+        blank=True, null=True,
+        verbose_name='Fecha de publicación'
+    )
+
     class Meta:
         verbose_name = 'Recurso'
         verbose_name_plural = 'Recursos'
 
     def __str__(self):
         return self.name + ': ' + self.url
+
+    def save(self, *args, **kwargs):
+        if self.publication_date is None:
+            self.publication_date = timezone.localtime(timezone.now())
+        super(Resource, self).save(*args, **kwargs)
