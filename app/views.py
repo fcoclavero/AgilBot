@@ -45,7 +45,7 @@ def search(request, words):
             none_qs = none_qs | queryset2
 
     context = {
-        'resources': none_qs,
+        'resources': none_qs.distinct(),
         'query': words,
         'weeks': models.Week.objects.all().order_by('-number'),
         'section': 'all',
